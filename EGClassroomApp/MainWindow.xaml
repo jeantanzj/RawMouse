@@ -1,0 +1,51 @@
+﻿<Window x:Class="EGClassroom.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:EGClassroom.Views"
+        mc:Ignorable="d"
+        xmlns:viewmodel="clr-namespace:EGClassroom.ViewModels"
+        Title="MainWindow"
+        Height="{x:Static SystemParameters.PrimaryScreenHeight}" 
+        Width="{x:Static SystemParameters.PrimaryScreenWidth}" 
+        WindowState="Maximized" 
+        xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid">
+    <!--<Window.DataContext>
+        <viewmodel:CompositeViewModel/> 
+    </Window.DataContext>-->
+    <Window.Resources>
+
+        <DataTemplate DataType="{x:Type viewmodel:AnswersViewModel}">
+
+            <local:AnswerView/>
+
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type viewmodel:RegisteredDevicesViewModel}">
+
+            <local:RegisteredDeviceView/>
+
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type viewmodel:QuizViewModel}">
+
+            <local:QuizView/>
+
+        </DataTemplate>
+
+    </Window.Resources>
+
+   
+
+        <!--<StackPanel x:Name="navigation" DockPanel.Dock="Left">
+
+            <Button Content="Answers" Command="{Binding ToAnswerViewCommand}"></Button>
+
+            <Button Content="Register devices" Command="{Binding ToRegisteredDeviceViewCommand}"></Button>
+
+        </StackPanel>-->
+
+        <ContentControl x:Name="Pages"  Content="{Binding SelectedViewModel}" />
+
+  
+</Window>

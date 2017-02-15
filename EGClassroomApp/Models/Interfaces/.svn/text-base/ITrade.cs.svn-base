@@ -1,0 +1,17 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+
+namespace WpfApplication9.Models.Interfaces
+{
+    public interface ITrade
+    {
+        string Side { get; set; }
+        string Ticker { get; set; }
+        string Qty { get; set; }
+        string Price { get; set; }
+        string Trader { get; set; }
+        string Sales { get; set; }
+    }
+}

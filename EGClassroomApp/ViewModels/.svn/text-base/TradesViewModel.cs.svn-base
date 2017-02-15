@@ -1,0 +1,40 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using WpfApplication9.ViewModels.Interfaces;
+using System.Windows.Input;
+using System.Collections.ObjectModel;
+using WpfApplication9.Models;
+using WpfApplication9.ViewModels.Commands;
+using System.ComponentModel;
+using System.Windows.Threading;
+using WpfApplication9.ViewModels;
+using System.Windows.Controls;
+
+namespace WpfApplication9.ViewModel
+{
+    public class TradesViewModel : BaseViewModel, ITradeViewModel
+    {
+        private ObservableCollection<Trade> _trades = new ObservableCollection<Trade>();
+
+        private ICommand _saveCommand;
+        private ICommand _loadCommand;
+
+        public TradesViewModel()
+        {
+            _saveCommand = new SaveTradesCommand();
+            _loadCommand = new LoadTradesCommand();
+            _trades = GetTrades();
+        }
+
+        public ObservableCollection<Trade> Trades { get {return _trades;} }
+
+        public ObservableCollection<Trade> GetTrades()
+        {
+            if (_trades == null || _trades.Count == 0)
+                _loadCommand.Execute(_trades);
+            return _trades;
+        }
+    }
+}

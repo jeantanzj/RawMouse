@@ -1,0 +1,23 @@
+﻿<Window x:Class="EGClassroom.Views.AnswerWindowView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:EGClassroom.Views"
+        mc:Ignorable="d"
+        xmlns:viewmodel="clr-namespace:EGClassroom.ViewModels"
+        Title="AnswerWindowView"
+        Height="{x:Static SystemParameters.PrimaryScreenHeight}" 
+        Width="{x:Static SystemParameters.PrimaryScreenWidth}" 
+        WindowState="Normal" 
+        xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid">
+    <Window.Resources>
+
+        <DataTemplate DataType="{x:Type viewmodel:AnswersViewModel}">
+
+            <local:AnswerView/>
+
+        </DataTemplate>
+    </Window.Resources>
+    <ContentControl x:Name="Pages"  Content="{Binding AnswerWindowViewModel}" />
+</Window>

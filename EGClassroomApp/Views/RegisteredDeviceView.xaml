@@ -1,0 +1,62 @@
+﻿<UserControl x:Class="EGClassroom.Views.RegisteredDeviceView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:EGClassroom.Views"
+        mc:Ignorable="d"
+        xmlns:viewmodel="clr-namespace:EGClassroom.ViewModels"
+        Height="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=Height}"
+        Width="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=Width}"
+         xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid">
+
+    <DockPanel>
+        <DockPanel.DataContext>
+            <viewmodel:RegisteredDevicesViewModel/>
+        </DockPanel.DataContext>
+        <Menu DockPanel.Dock="Top">
+            <MenuItem Header="Reset" Command="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.ResetAllCommand}"/>
+        </Menu>
+        <StackPanel>
+                <Grid Margin="0,5">
+
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="2*"/>
+                        <RowDefinition Height="8*"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="1*" />
+                        <ColumnDefinition Width="2*" />
+                    </Grid.ColumnDefinitions>
+                    <Label Grid.Column="0" Grid.Row="0" Content="Welcome to the classroom app"/>
+                    <!--<Button Grid.Column="0" Grid.Row ="1" Content="Choose PPT" Command="{Binding ChoosePPTCommand}" />-->
+                <TextBlock Grid.Column="0" Grid.Row ="1" Text="Paste PPT URL: "/>
+                <TextBox Grid.Column="1" Grid.Row="1" AcceptsReturn="False" Text="{Binding Path=PPTWebAddress}"></TextBox>
+                </Grid>
+                <StackPanel Margin="0,10,0,0">
+
+
+                    <DataGrid 
+                AutoGenerateColumns="True"
+                HorizontalAlignment="Stretch" Name="datagrid_devices" VerticalAlignment="Top"
+                ItemsSource="{Binding RegDevices}"
+                />
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="8*" MinHeight="80"/>
+                            <RowDefinition Height="2*" MinHeight="20"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="2*" />
+                            <ColumnDefinition Width="1*" />
+                        </Grid.ColumnDefinitions>
+
+                        <Button Margin="10,10"  Grid.Column="0"  Grid.Row="0" Content="Press here using device to register" Command="{Binding RegisterCommand}"/>
+                    <Button Margin="10,10" Grid.Column="1"  Grid.Row="0"  Content="Press here when complete" Command="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.ToQuizViewAndToAnswerWindowViewCommand}"/>
+                        <TextBlock Margin="10,0" Grid.Row="1" Text="{Binding Path=Messages}"/>
+                    </Grid>
+                </StackPanel>
+            </StackPanel>
+    </DockPanel>
+    
+</UserControl>

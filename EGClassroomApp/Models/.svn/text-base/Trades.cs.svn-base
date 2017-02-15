@@ -1,0 +1,23 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+
+namespace WpfApplication9.Models
+{
+    public class Trades
+    {
+        public static IEnumerable<Trade> LoadTradesFromDataSource()
+        {
+            var pricetmp = DateTime.Now.Second; // just to get some number
+            var qtytmp = (DateTime.Now.Second + 5) * 1000; // just to get some number
+
+            return new List<Trade>()
+            {
+                new Trade(){Side="B", Price=pricetmp.ToString(), Ticker="aol", Trader="tom", Sales="harry", Qty=qtytmp.ToString()},
+                new Trade(){Side="B", Price=pricetmp.ToString(), Ticker="gm", Trader="tom", Sales="harry", Qty=qtytmp.ToString()},
+                new Trade(){Side="B", Price=pricetmp.ToString(), Ticker="ge", Trader="tom", Sales="harry", Qty=qtytmp.ToString()},
+            };
+        }
+    }
+}

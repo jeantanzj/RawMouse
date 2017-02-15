@@ -1,0 +1,47 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Windows.Input;
+using WpfApplication9.Models;
+using System.Collections.ObjectModel;
+using System.Threading;
+using System.Threading.Tasks;
+using System.ComponentModel;
+using System.Windows.Threading;
+
+namespace WpfApplication9.ViewModels.Commands
+{
+    public class LoadTradesCommand : ICommand
+    {
+        public event EventHandler CanExecuteChanged;
+        public bool CanExecute(object parameter)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Execute(object parameter)
+        {
+            var loadedTrades = parameter as ObservableCollection<Trade>;
+            if (loadedTrades != null)
+            {
+                TaskFactory taskfac = new TaskFactory();
+                taskfac.StartNew(() =>
+                    {
+                        while (true)
+                        {
+                            var tradelist = Trades.LoadTradesFromDataSource();
+                            App.Current.Dispatcher.Invoke(new Action(() =>
+                            {
+                                loadedTrades.Clear();
+                                foreach (var trade in tradelist)
+                                    loadedTrades.Add(trade);
+                            }));
+
+                            Thread.Sleep(2000);
+                        }
+                    });
+            }
+        }
+    }
+}

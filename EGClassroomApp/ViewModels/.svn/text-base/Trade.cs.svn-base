@@ -1,0 +1,35 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using WpfApplication9.Models.Interfaces;
+using System.ComponentModel;
+
+namespace WpfApplication9.Models
+{
+    public class Trade : ITrade//, INotifyPropertyChanged
+    {
+        private string _qty;
+        public string Side { get; set; }
+        public string Ticker { get; set; }
+        public string Qty 
+        {
+            get { return _qty; }
+            set
+            {
+                _qty = value;
+                //OnPropertyChanged("Qty");
+            }
+        }
+        public string Price { get; set; }
+        public string Trader { get; set; }
+        public string Sales { get; set; }
+
+        //public event PropertyChangedEventHandler PropertyChanged;
+        //private void OnPropertyChanged(string propertyName)
+        //{
+        //    if (PropertyChanged != null)
+        //        PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+        //}
+    }
+}
