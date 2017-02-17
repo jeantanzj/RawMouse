@@ -4,23 +4,31 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:EGClassroom.Views"
+        xmlns:g="clr-namespace:EGClassroom"
         mc:Ignorable="d"
         xmlns:viewmodel="clr-namespace:EGClassroom.ViewModels"
         Height="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=Height}"
         Width="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=Width}"
         xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid">
+    <UserControl.Resources>
+        <g:InverseBoolConverter x:Key="InvertBool"/>
+    </UserControl.Resources>
 
-
-    <DockPanel >
-        <DockPanel.DataContext>
-            <viewmodel:AnswersViewModel/>
-        </DockPanel.DataContext>
+    <DockPanel DataContext="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.answersVM}" >
+      
         <Menu DockPanel.Dock="Top">
             <MenuItem Header="Register Devices" Command="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.ToRegisteredDeviceViewCommand}"/>
             <MenuItem Header="Quiz View" Command="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.ToQuizViewCommand}"/>
             <MenuItem Header="Export to CSV" Command="{Binding ExportAnswersCommand}"/>
         </Menu>
+        
         <StackPanel>
+            <WrapPanel Margin="5,0">
+                <Button Margin="10,10" Content="Receive Input" Command="{Binding ReceiveInputCommand}"
+                        IsEnabled="{Binding Path=InQuizMode,Mode=Default,UpdateSourceTrigger=PropertyChanged, Converter={StaticResource InvertBool}}"/>
+                <Button Margin="10,10" Content="Stop" Command="{Binding StopInputCommand}"
+                         IsEnabled="{Binding Path=InQuizMode, Mode=Default,UpdateSourceTrigger=PropertyChanged}"/>
+            </WrapPanel>
             <DataGrid 
                 AutoGenerateColumns="True"
                 HorizontalAlignment="Stretch" Name="datagrid_answer" VerticalAlignment="Top"

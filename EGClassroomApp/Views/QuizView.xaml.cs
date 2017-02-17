@@ -24,7 +24,7 @@ namespace EGClassroom.Views
         public QuizView()
         {
             InitializeComponent();
-            this.DataContext = CompositeViewModel.Instance;
+            //this.DataContext = CompositeViewModel.Instance;
             this.Dispatcher.ShutdownStarted += Dispatcher_ShutdownStarted;
         }
 
@@ -32,8 +32,8 @@ namespace EGClassroom.Views
         {
             try
             {
-                var obj = this.DataContext as QuizViewModel;
-                obj.StopMouse();
+                /*var obj = this.DataContext as QuizViewModel;
+                obj.StopMouse();*/
                 //do something to the mouse
             }
             catch (Exception err)

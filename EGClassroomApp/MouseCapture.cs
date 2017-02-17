@@ -73,7 +73,7 @@ namespace EGClassroom
             deviceMessage = e.MouseClickEvent.Message.ToString();
             log.Debug("["+_boundEvents +"] "+ deviceHandle + ": " + deviceMessage);
             
-            if (QuizViewModel.GetInQuizMode())
+            if (AnswersViewModel.GetInQuizMode())
             {
                 AnswersViewModel.AddAnswer(deviceHandle, deviceMessage);
             }

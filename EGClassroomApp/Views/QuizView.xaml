@@ -4,15 +4,12 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:EGClassroom.Views"
-             xmlns:g="clr-namespace:EGClassroom"
             mc:Ignorable="d"
             xmlns:viewmodel="clr-namespace:EGClassroom.ViewModels"
             Height="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=Height}"
             Width="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=Width}"
              xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid">
-    <UserControl.Resources>
-        <g:InverseBoolConverter x:Key="InvertBool"/>
-    </UserControl.Resources>
+
     <DockPanel Name="dp_quizview">
         <!--<DockPanel.DataContext>
             <viewmodel:CompositeViewModel/>
@@ -25,38 +22,32 @@
         <DockPanel HorizontalAlignment="Stretch" 
             VerticalAlignment="Stretch" 
             Height="Auto">
-            <StackPanel DockPanel.Dock="Right" VerticalAlignment="Stretch" 
-                Width="170" >
-                <Button Margin="10,10" Content="Receive Input" Command="{Binding quizVM.ReceiveInputCommand}"
+            <WrapPanel DockPanel.Dock="Bottom" VerticalAlignment="Stretch" 
+                Height="150" DataContext="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.answersVM}">
+                <!--<Button Margin="10,10" Content="Receive Input" Command="{Binding quizVM.ReceiveInputCommand}"
                         IsEnabled="{Binding Path=quizVM.InQuizMode,Mode=Default,UpdateSourceTrigger=PropertyChanged, Converter={StaticResource InvertBool}}"/>
                 <Button Margin="10,10" Content="Stop" Command="{Binding quizVM.StopInputCommand}"
-                         IsEnabled="{Binding Path=quizVM.InQuizMode, Mode=Default,UpdateSourceTrigger=PropertyChanged}"/>
-                <WrapPanel Margin="5,0">
+                         IsEnabled="{Binding Path=quizVM.InQuizMode, Mode=Default,UpdateSourceTrigger=PropertyChanged}"/>-->
+                
+               
                     <Label Content="Quiz Mode:"/>
-                    <Label Content="{Binding Path=quizVM.InQuizMode,Mode=Default,UpdateSourceTrigger=PropertyChanged}"/>
-                </WrapPanel>
-                <WrapPanel Margin="5,0">
-                    <TextBlock TextWrapping="Wrap">
-                        Current Question:
-                         <TextBlock Text="{Binding Path=quizVM.QuestionID,Mode=Default,UpdateSourceTrigger=PropertyChanged}"/>
-                    </TextBlock>
-                   
-                    <TextBlock TextWrapping="Wrap">
-                        Answers Received / No of Devices:
-                        <TextBlock Text="{Binding Path=answersVM.NumAnswers}"/>
-                        /
-                        <TextBlock Text="{Binding Path=regDevicesVM.RegDevices.Count}"/>
-                    </TextBlock>
-                </WrapPanel>
-            </StackPanel>
+                    <Label Content="{Binding Path=InQuizMode,Mode=Default,UpdateSourceTrigger=PropertyChanged}"/>
+                    <Label Content="Current Question:"/>
+                    <Label Content="{Binding Path=QuestionID,Mode=Default,UpdateSourceTrigger=PropertyChanged}"/>
+                    <Label Content="Answers Received: "/>
+                    <Label Content="{Binding Path=NumAnswers}"/>
+                    <!--<Label Content="{Binding Path=regDevicesVM.RegDevices.Count}"/>-->
+                  
+                
+            </WrapPanel>
             
             <GroupBox
-                DockPanel.Dock="Left" 
+                DockPanel.Dock="Top" 
                 Header="Quiz" 
                 HorizontalAlignment="Stretch"
                  Width="Auto" 
-                Height="Auto" >
-                <WebBrowser Name="wb_ppt" viewmodel:QuizViewModel.BindableSource="{Binding quizVM.PPTWebAddress}" Margin="5"/>
+                Height="Auto" DataContext="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.quizVM}">
+                <WebBrowser Name="wb_ppt" viewmodel:QuizViewModel.BindableSource="{Binding PPTWebAddress}" Margin="5"/>
         </GroupBox>
 
            

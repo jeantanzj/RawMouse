@@ -19,102 +19,17 @@ namespace EGClassroom.ViewModels
 
         //private string _pptFilePath = new RegisteredDevicesViewModel().PPTFilePath;
         private string _pptWebAddress = "";//new RegisteredDevicesViewModel().PPTWebAddress;
-        private RelayCommand _receiveInputCommand;
-        private RelayCommand _stopInputCommand;
-        private static int _questionId = 0;
-        private static bool _inQuizMode = false;
-        private MouseCapture _mc;
-
-       
-
+     
         public QuizViewModel(string pptWebAddress)
         {
-            _mc = new MouseCapture();
-            //_mc = MouseCapture.Instance;
-            StopMouse();
+
             _pptWebAddress = pptWebAddress;
         }
         //public string PPTFilePath
         //{
         //    get { return _pptFilePath;  }
         //}
-        internal void StopMouse()
-        {
-            _mc.RemoveOnMouseClicked();
-        }
-        internal bool StartMouse()
-        {
-            _mc.RemoveOnMouseClicked();
-            return _mc.AddOnMouseClicked();
-        }
-
-        public bool InQuizMode
-        {
-            get
-            {
-                return _inQuizMode;
-            }
-            set
-            {
-                if (value != _inQuizMode)
-                {
-                    _inQuizMode = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
-        public static bool GetInQuizMode()
-        {
-            return _inQuizMode;
-        }
-
-        public static int GetQuestionID()
-        {
-            return _questionId;
-        }
-        public int QuestionID
-        {
-            get { return _questionId; }
-            set
-            {
-                if(value != _questionId)
-                {
-                    _questionId = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
-        public RelayCommand ReceiveInputCommand
-        {
-            get
-            {
-                return _receiveInputCommand ?? (_receiveInputCommand = new RelayCommand(
-                 param =>
-                 {  
-                     if (StartMouse() == true)
-                     {
-                         
-                         QuestionID += 1;
-                         InQuizMode = true;
-                         log.Debug(String.Format("Start getting answers for qn {0} ", _questionId));
-                         return;
-                     }
-                 }));
-            }
-        }
-
-      
-
-        public RelayCommand StopInputCommand
-        {
-            get
-            {
-                return _stopInputCommand ?? (_stopInputCommand = new RelayCommand(param => {
-                    StopMouse();
-                    InQuizMode = false;
-                }));
-            }
-        }
+     
 
         public string PPTWebAddress
         {

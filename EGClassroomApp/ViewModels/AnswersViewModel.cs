@@ -23,11 +23,14 @@ namespace EGClassroom.ViewModels
         private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
         private static ObservableCollection<Answer> _answers;
         private RelayCommand _exportAnswersCommand;
+        private RelayCommand _receiveInputCommand;
+        private RelayCommand _stopInputCommand;
         //private ICommand _loadCommand;
 
         private static Dictionary<string, string> _mapping;
+        private static int _questionId = 0;
+        private static bool _inQuizMode = false;
 
-        
 
         private MouseCapture _mc;
 
@@ -98,14 +101,48 @@ namespace EGClassroom.ViewModels
         {
             OnPropertyChanged("NumAnswers");
         }
+        public bool InQuizMode
+        {
+            get
+            {
+                return _inQuizMode;
+            }
+            set
+            {
+                if (value != _inQuizMode)
+                {
+                    _inQuizMode = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+        public static bool GetInQuizMode()
+        {
+            return _inQuizMode;
+        }
 
+        public static int GetQuestionID()
+        {
+            return _questionId;
+        }
+        public int QuestionID
+        {
+            get { return _questionId; }
+            set
+            {
+                if (value != _questionId)
+                {
+                    _questionId = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
 
         public int NumAnswers
         {
             get
-            {
-                int questionId = QuizViewModel.GetQuestionID();
-                int numAns = (from ans in _answers where ans.QuestionID == questionId select ans).Count();
+            {              
+                int numAns = (from ans in _answers where ans.QuestionID == _questionId select ans).Count();
                 System.Diagnostics.Debug.Print("numAns: " + numAns);
                 return numAns;
             }
@@ -114,14 +151,14 @@ namespace EGClassroom.ViewModels
 
         public static void AddAnswer(string deviceHandle, string deviceMessage)
         {
-            int questionId = QuizViewModel.GetQuestionID();
-            int existsAnswer = (from ans in _answers where ans.QuestionID == questionId && ans.DeviceID == deviceHandle select ans).Count();
+           
+            int existsAnswer = (from ans in _answers where ans.QuestionID == _questionId && ans.DeviceID == deviceHandle select ans).Count();
             if (existsAnswer == 0)
             {
                 string studentName = getStudentName(deviceHandle);
                 string studentAnswer = getStudentAnswer(deviceMessage);
-                _answers.Insert(0, new Answer() { QuestionID = questionId, DeviceID = deviceHandle, StudentName = studentName, StudentAnswer = studentAnswer });
-                log.Debug(String.Format("Inserted: {0}, {1}, {2}, {3} ", questionId, deviceHandle, studentName, studentAnswer));
+                _answers.Insert(0, new Answer() { QuestionID = _questionId, DeviceID = deviceHandle, StudentName = studentName, StudentAnswer = studentAnswer });
+                log.Debug(String.Format("Inserted: {0}, {1}, {2}, {3} ", _questionId, deviceHandle, studentName, studentAnswer));
 
             };
         }
@@ -160,6 +197,37 @@ namespace EGClassroom.ViewModels
             }
         }
 
+        public RelayCommand ReceiveInputCommand
+        {
+            get
+            {
+                return _receiveInputCommand ?? (_receiveInputCommand = new RelayCommand(
+                 param =>
+                 {
+                     if (StartMouse() == true)
+                     {
+
+                         QuestionID += 1;
+                         InQuizMode = true;
+                         log.Debug(String.Format("Start getting answers for qn {0} ", _questionId));
+                         return;
+                     }
+                 }));
+            }
+        }
+
+
+
+        public RelayCommand StopInputCommand
+        {
+            get
+            {
+                return _stopInputCommand ?? (_stopInputCommand = new RelayCommand(param => {
+                    StopMouse();
+                    InQuizMode = false;
+                }));
+            }
+        }
         private void showChooseCSVDialog()
         {
             SaveFileDialog saveFileDialog = new SaveFileDialog();
