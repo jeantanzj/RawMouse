@@ -22,12 +22,30 @@ namespace EGClassroom.ViewModels
         private RelayCommand _resetAllCommand;
         private static object _selectedViewModel;
         private static object _answerWindowViewModel;
-        public CompositeViewModel()
+        
+        
+        private CompositeViewModel()
         {
             regDevicesVM = new RegisteredDevicesViewModel();
             answersVM = new AnswersViewModel();
             quizVM = new QuizViewModel(regDevicesVM.PPTWebAddress);
         }
+
+        private static CompositeViewModel _instance;
+        private static object _syncObj = new object();
+        public static CompositeViewModel Instance
+        {
+            get
+            {
+                lock (_syncObj)
+                {
+                    if (_instance == null)
+                        _instance = new CompositeViewModel();
+                    return _instance;
+                }
+            }
+        }
+       
 
         public RelayCommand ResetAllCommand
         {

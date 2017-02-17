@@ -31,15 +31,21 @@ namespace EGClassroom.ViewModels
         public RegisteredDevicesViewModel( ){
             _loadDevicesCommand = new LoadDevicesCommand();
             _regDevices = GetRegisteredDevices();
+            //_mc = MouseCapture.Instance;
             _mc = new MouseCapture();
-            _mc.RemoveOnMouseClicked();
-            _mc.AddOnMouseClicked();
-           
-            
-           
+            StartMouse();
         }
-       
-       
+
+        internal void StopMouse()
+        {
+            _mc.RemoveOnMouseClicked();
+        }
+        internal bool StartMouse()
+        {
+            _mc.RemoveOnMouseClicked();
+            return _mc.AddOnMouseClicked();
+        }
+
         public static ObservableCollection<RegisteredDevice> RegDevices
         {
             get { return _regDevices; }
@@ -137,6 +143,7 @@ namespace EGClassroom.ViewModels
         }
         private void doRegisterMouseClick()
         {
+           
            if (string.IsNullOrEmpty(MouseCapture.deviceHandle)) return;
            int existsDevice = (from dev in _regDevices where dev.DeviceID == MouseCapture.deviceHandle select dev).Count();
            if (existsDevice == 0)

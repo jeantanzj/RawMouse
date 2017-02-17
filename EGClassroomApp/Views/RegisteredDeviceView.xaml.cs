@@ -23,6 +23,7 @@ namespace EGClassroom.Views
         public RegisteredDeviceView()
         {
             InitializeComponent();
+            
             this.Dispatcher.ShutdownStarted += Dispatcher_ShutdownStarted;
         }
 
@@ -31,11 +32,12 @@ namespace EGClassroom.Views
             try
             {
                 var obj = this.DataContext as RegisteredDevicesViewModel;
+                obj.StopMouse();
                 //do something to the mouse
             }
             catch(Exception err)
             {
-                System.Diagnostics.Debug.Print("Could not close mouse input. Failing silently: " + err.Message);
+                System.Diagnostics.Debug.Print("RegistedDeviceView Could not close mouse input. Failing silently: " + err.Message);
             }
             
         }

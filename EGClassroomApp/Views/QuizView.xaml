@@ -13,10 +13,10 @@
     <UserControl.Resources>
         <g:InverseBoolConverter x:Key="InvertBool"/>
     </UserControl.Resources>
-    <DockPanel >
-        <DockPanel.DataContext>
+    <DockPanel Name="dp_quizview">
+        <!--<DockPanel.DataContext>
             <viewmodel:CompositeViewModel/>
-        </DockPanel.DataContext>
+        </DockPanel.DataContext>-->
         <Menu DockPanel.Dock="Top">
             <MenuItem Header="Register Devices" Command="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.ToRegisteredDeviceViewCommand}"/>
             <MenuItem Header="Answer View" Command="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.ToAnswerWindowViewCommand}"/>

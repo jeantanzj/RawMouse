@@ -10,8 +10,9 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 namespace EGClassroom
 {
-    public  class MouseCapture
+    public sealed  class MouseCapture
     {
+        private static volatile MouseCapture instance; //singleton
         private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
         public static string deviceHandle;
         public static string deviceMessage;
@@ -19,9 +20,10 @@ namespace EGClassroom
         private static System.Windows.Interop.WindowInteropHelper _winHelper;
         const bool CaptureOnlyInForeground = true;
         private static int _boundEvents = 0;
-         public MouseCapture()
-        {
-            if (_winHelper == null){
+        
+        public MouseCapture() {
+            if (_winHelper == null)
+            {
                 System.Windows.Window window = System.Windows.Application.Current.MainWindow;
                 _winHelper = new System.Windows.Interop.WindowInteropHelper(window);
             }
@@ -30,9 +32,29 @@ namespace EGClassroom
                 _rawinput = new RawInput(_winHelper.Handle, CaptureOnlyInForeground);
                 _rawinput.AddMessageFilter();
             }
-            
-            
         }
+
+        /*
+        private static object syncRoot = new Object();
+        public static MouseCapture Instance
+        {
+            
+            get
+            {
+                if (instance == null)
+                {
+                    lock (syncRoot)
+                    {
+                        if (instance == null)
+                            instance = new MouseCapture();
+                    }
+                }
+
+                return instance;
+            }
+
+
+        }*/
 
         public static bool IsStarted()
         {
@@ -45,7 +67,7 @@ namespace EGClassroom
             return (string.Format("ERROR: [{0}] EVENTS BOUND", _boundEvents));
         }
         
-        private  void OnMouseClicked(object sender, RawInputEventArg e)
+        private static void OnMouseClicked(object sender, RawInputEventArg e)
         { 
             deviceHandle = e.MouseClickEvent.DeviceHandle.ToString();
             deviceMessage = e.MouseClickEvent.Message.ToString();

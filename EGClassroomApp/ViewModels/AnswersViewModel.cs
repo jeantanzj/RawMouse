@@ -27,6 +27,8 @@ namespace EGClassroom.ViewModels
 
         private static Dictionary<string, string> _mapping;
 
+        
+
         private MouseCapture _mc;
 
        
@@ -42,12 +44,21 @@ namespace EGClassroom.ViewModels
                 { "RI_MOUSE_BUTTON_4_DOWN", "D" }, // D -- some alternatives since these buttons are uncommon
                 { "RI_MOUSE_BUTTON_5_DOWN","D"},
                 { "RI_MOUSE_WHEEL","D" } };
-            //mc = new MouseCapture();
             _mc = new MouseCapture();
-            _mc.RemoveOnMouseClicked();
+            //_mc = MouseCapture.Instance;
+            StopMouse();
           
         }
 
+        internal void StopMouse()
+        {
+            _mc.RemoveOnMouseClicked();
+        }
+        internal bool StartMouse()
+        {
+            _mc.RemoveOnMouseClicked();
+            return _mc.AddOnMouseClicked();
+        }
         public static ObservableCollection<Answer> Answers { get { return _answers; } }
 
         public ObservableCollection<Answer> GetAnswers()

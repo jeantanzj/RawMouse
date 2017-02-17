@@ -24,18 +24,29 @@ namespace EGClassroom.ViewModels
         private static int _questionId = 0;
         private static bool _inQuizMode = false;
         private MouseCapture _mc;
+
        
+
         public QuizViewModel(string pptWebAddress)
         {
             _mc = new MouseCapture();
-            _mc.RemoveOnMouseClicked();
+            //_mc = MouseCapture.Instance;
+            StopMouse();
             _pptWebAddress = pptWebAddress;
         }
         //public string PPTFilePath
         //{
         //    get { return _pptFilePath;  }
         //}
-
+        internal void StopMouse()
+        {
+            _mc.RemoveOnMouseClicked();
+        }
+        internal bool StartMouse()
+        {
+            _mc.RemoveOnMouseClicked();
+            return _mc.AddOnMouseClicked();
+        }
 
         public bool InQuizMode
         {
@@ -80,7 +91,7 @@ namespace EGClassroom.ViewModels
                 return _receiveInputCommand ?? (_receiveInputCommand = new RelayCommand(
                  param =>
                  {  
-                     if (_mc.AddOnMouseClicked() == true)
+                     if (StartMouse() == true)
                      {
                          
                          QuestionID += 1;
@@ -99,7 +110,7 @@ namespace EGClassroom.ViewModels
             get
             {
                 return _stopInputCommand ?? (_stopInputCommand = new RelayCommand(param => {
-                    _mc.RemoveOnMouseClicked();
+                    StopMouse();
                     InQuizMode = false;
                 }));
             }

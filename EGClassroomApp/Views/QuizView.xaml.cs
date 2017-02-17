@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EGClassroom.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,6 +24,22 @@ namespace EGClassroom.Views
         public QuizView()
         {
             InitializeComponent();
+            this.DataContext = CompositeViewModel.Instance;
+            this.Dispatcher.ShutdownStarted += Dispatcher_ShutdownStarted;
+        }
+
+        private void Dispatcher_ShutdownStarted(object sender, EventArgs e)
+        {
+            try
+            {
+                var obj = this.DataContext as QuizViewModel;
+                obj.StopMouse();
+                //do something to the mouse
+            }
+            catch (Exception err)
+            {
+                System.Diagnostics.Debug.Print("Q Could not close mouse input. Failing silently: " + err.Message);
+            }
         }
     }
 }

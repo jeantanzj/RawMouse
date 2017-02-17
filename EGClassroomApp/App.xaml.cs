@@ -18,7 +18,7 @@ namespace EGClassroom
             try
             {
                 MainWindow win = new MainWindow();
-                ViewModels.CompositeViewModel vm = new ViewModels.CompositeViewModel();
+                ViewModels.CompositeViewModel vm = ViewModels.CompositeViewModel.Instance;
                 win.DataContext = vm;
                 vm.goToRegisteredDeviceView();
                 win.Show();
