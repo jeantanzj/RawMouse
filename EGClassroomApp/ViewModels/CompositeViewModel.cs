@@ -26,9 +26,11 @@ namespace EGClassroom.ViewModels
         
         private CompositeViewModel()
         {
-            regDevicesVM = new RegisteredDevicesViewModel();
+            
             answersVM = new AnswersViewModel();
+            regDevicesVM = new RegisteredDevicesViewModel();
             quizVM = new QuizViewModel(regDevicesVM.PPTWebAddress);
+           
         }
 
         private static volatile CompositeViewModel _instance;
@@ -39,9 +41,7 @@ namespace EGClassroom.ViewModels
             {
                 lock (_syncObj)
                 {
-                    if (_instance == null)
-                        _instance = new CompositeViewModel();
-                    return _instance;
+                    return _instance ?? (_instance = new CompositeViewModel());
                 }
             }
         }

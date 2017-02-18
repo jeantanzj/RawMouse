@@ -17,7 +17,7 @@ namespace EGClassroom.Views
     /// <summary>
     /// Interaction logic for AnswerWindowView.xaml
     /// </summary>
-    public partial class AnswerWindowView : Window
+    public partial class AnswerWindowView 
     {
         public AnswerWindowView()
         {
