@@ -6,11 +6,12 @@ using System.Collections.ObjectModel;
 using EGClassroom.Models;
 using System.Windows.Input;
 using System.ComponentModel;
+using EGClassroom.Helpers;
 
 namespace EGClassroom.ViewModels.Interfaces
 {
     public interface IAnswerViewModel
     {
-        ObservableCollection<Answer> GetAnswers();
+        
     }
 }

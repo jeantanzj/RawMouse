@@ -12,7 +12,7 @@ namespace EGClassroom
 {
     public sealed  class MouseCapture
     {
-        private static volatile MouseCapture instance; //singleton
+       
         private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
         public static string deviceHandle;
         public static string deviceMessage;

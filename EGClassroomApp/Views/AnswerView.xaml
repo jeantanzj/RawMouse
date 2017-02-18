@@ -13,8 +13,8 @@
     <UserControl.Resources>
         <g:InverseBoolConverter x:Key="InvertBool"/>
     </UserControl.Resources>
-
-    <DockPanel DataContext="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.answersVM}" >
+    <!--The MainWindow's DataContext is the CompositeViewModel-->
+    <DockPanel DataContext="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.answersVM}">
       
         <Menu DockPanel.Dock="Top">
             <MenuItem Header="Register Devices" Command="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.ToRegisteredDeviceViewCommand}"/>
@@ -23,17 +23,66 @@
         </Menu>
         
         <StackPanel>
-            <WrapPanel Margin="5,0">
-                <Button Margin="10,10" Content="Receive Input" Command="{Binding ReceiveInputCommand}"
+            <StackPanel Margin="5,0">
+                    <Button Margin="10,10" Content="Receive Input" Command="{Binding ReceiveInputCommand}"
                         IsEnabled="{Binding Path=InQuizMode,Mode=Default,UpdateSourceTrigger=PropertyChanged, Converter={StaticResource InvertBool}}"/>
-                <Button Margin="10,10" Content="Stop" Command="{Binding StopInputCommand}"
+                <Label Content="Choose the correct answer to stop receiving input"/>
+                <WrapPanel>
+                    <Button Margin="10,10" Padding="10,0" Content="A" Command="{Binding StopInput_A_Command}"
                          IsEnabled="{Binding Path=InQuizMode, Mode=Default,UpdateSourceTrigger=PropertyChanged}"/>
-            </WrapPanel>
-            <DataGrid 
-                AutoGenerateColumns="True"
-                HorizontalAlignment="Stretch" Name="datagrid_answer" VerticalAlignment="Top"
-                ItemsSource="{Binding Answers}"
+                    <Button Margin="10,10" Padding="10,0" Content="B" Command="{Binding StopInput_B_Command}"
+                         IsEnabled="{Binding Path=InQuizMode, Mode=Default,UpdateSourceTrigger=PropertyChanged}"/>
+                    <Button Margin="10,10" Padding="10,0" Content="C" Command="{Binding StopInput_C_Command}"
+                         IsEnabled="{Binding Path=InQuizMode, Mode=Default,UpdateSourceTrigger=PropertyChanged}"/>
+                </WrapPanel>
+                
+            </StackPanel>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <DataGrid 
+                    Grid.Column="0"
+                    AutoGenerateColumns="True"
+                    HorizontalAlignment="Stretch" Name="datagrid_answer" VerticalAlignment="Top"
+                    ItemsSource="{Binding Answers}" IsReadOnly="True"
                 />
+
+                <ItemsControl ItemsSource="{Binding Records}" Grid.Column="1">
+
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <UniformGrid Columns="1"/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+
+
+
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <WrapPanel Orientation="Horizontal">
+                                <Grid Margin="0,5,0,0">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="auto"/>
+                                        <ColumnDefinition/>
+                                    </Grid.ColumnDefinitions>
+                                    <Image Source="{Binding Image}" Height="80" Width="80" Grid.Column="0"/>
+                                    <StackPanel Grid.Column="1" Orientation="Vertical" Width="100" Height="100" >
+                                        <TextBlock Text="{Binding Name}" Margin="5,1,0,1"/>
+                                        <TextBlock Text="{Binding ResultsString}" Margin="5,1,0,1"/>
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Text="Score: " Margin="5,1,0,1"/>
+                                            <TextBlock Text="{Binding Score}" Margin="3,1,0,1"/>
+                                        </StackPanel>
+                                    </StackPanel>
+                                </Grid>
+                            </WrapPanel>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </Grid>
+            
         </StackPanel>
     </DockPanel>
 </UserControl>

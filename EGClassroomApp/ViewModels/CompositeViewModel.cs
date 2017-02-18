@@ -31,7 +31,7 @@ namespace EGClassroom.ViewModels
             quizVM = new QuizViewModel(regDevicesVM.PPTWebAddress);
         }
 
-        private static CompositeViewModel _instance;
+        private static volatile CompositeViewModel _instance;
         private static object _syncObj = new object();
         public static CompositeViewModel Instance
         {

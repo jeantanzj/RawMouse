@@ -14,9 +14,9 @@ namespace EGClassroom.Models
 
             return new List<Answer>()
             {
-                new Answer(){QuestionID=1, DeviceID="001", StudentName="John", StudentAnswer="A"},
-                new Answer(){QuestionID=1, DeviceID="002", StudentName="Jane", StudentAnswer="C"},
-                new Answer(){QuestionID=1, DeviceID="003", StudentName="Jenny", StudentAnswer="A"},
+                new Answer(){QuestionID=1, DeviceID="001", StudentName="John", StudentAnswer="A", Status=ViewModels.AnswerStatusEnum.PENDING},
+                new Answer(){QuestionID=1, DeviceID="002", StudentName="Jane", StudentAnswer="C", Status=ViewModels.AnswerStatusEnum.PENDING},
+                new Answer(){QuestionID=1, DeviceID="003", StudentName="Jenny", StudentAnswer="A", Status=ViewModels.AnswerStatusEnum.PENDING},
             };
         }
     }

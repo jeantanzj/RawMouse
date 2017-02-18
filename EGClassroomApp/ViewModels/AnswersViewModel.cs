@@ -15,6 +15,7 @@ using log4net;
 using System.Reflection;
 using System.Collections.Specialized;
 using System.Windows.Forms;
+using EGClassroom.Helpers;
 
 namespace EGClassroom.ViewModels
 {
@@ -22,9 +23,13 @@ namespace EGClassroom.ViewModels
     {
         private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
         private static ObservableCollection<Answer> _answers;
+        private static ObservableCollection<Record> _records;
+        private static List<string> _correctAnswers;
         private RelayCommand _exportAnswersCommand;
         private RelayCommand _receiveInputCommand;
-        private RelayCommand _stopInputCommand;
+        private RelayCommand _stopInput_A_Command;
+        private RelayCommand _stopInput_B_Command;
+        private RelayCommand _stopInput_C_Command;
         //private ICommand _loadCommand;
 
         private static Dictionary<string, string> _mapping;
@@ -38,19 +43,38 @@ namespace EGClassroom.ViewModels
         public AnswersViewModel()
         {
             //_loadCommand = new LoadAnswersCommand();
-            _answers = GetAnswers();
-            AddOnAnswers_CollectionChanged();
+            _answers = Answers;
+            _answers.CollectionChanged += _answers_CollectionChanged;
             _mapping = new Dictionary<string, string>() {
                 { "RI_MOUSE_LEFT_BUTTON_DOWN", "A" },
                 { "RI_MOUSE_MIDDLE_BUTTON_DOWN", "B" },
-                { "RI_MOUSE_RIGHT_BUTTON_DOWN","C"},
-                { "RI_MOUSE_BUTTON_4_DOWN", "D" }, // D -- some alternatives since these buttons are uncommon
-                { "RI_MOUSE_BUTTON_5_DOWN","D"},
-                { "RI_MOUSE_WHEEL","D" } };
+                { "RI_MOUSE_RIGHT_BUTTON_DOWN","C"}
+            };
+            //{ "RI_MOUSE_BUTTON_4_DOWN", "D" }, // D -- some alternatives since these buttons are uncommon
+            //{ "RI_MOUSE_BUTTON_5_DOWN","D"},
+            //{ "RI_MOUSE_WHEEL","D" } };
+            _correctAnswers = new List<string>();
             _mc = new MouseCapture();
             //_mc = MouseCapture.Instance;
             StopMouse();
           
+        }
+
+        private  void _answers_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            OnPropertyChanged("NumAnswers");
+            if (e.NewItems != null)
+                foreach (Answer item in e.NewItems)
+                    item.PropertyChanged += answer_PropertyChanged;
+
+            if (e.OldItems != null)
+                foreach (Answer item in e.OldItems)
+                    item.PropertyChanged -= answer_PropertyChanged;
+        }
+
+        private  void answer_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            OnPropertyChanged("Answers");
         }
 
         internal void StopMouse()
@@ -62,44 +86,25 @@ namespace EGClassroom.ViewModels
             _mc.RemoveOnMouseClicked();
             return _mc.AddOnMouseClicked();
         }
-        public static ObservableCollection<Answer> Answers { get { return _answers; } }
-
-        public ObservableCollection<Answer> GetAnswers()
-        {
-            if (_answers == null)
-            {
-                _answers = new ObservableCollection<Answer>();
+#region Members
+        public static ObservableCollection<Answer> Answers {
+            get {
+                    return _answers ?? (_answers = new ObservableCollection<Answer>());
             }
-            //if ( _answers.Count ==0)
-            //{
-            //    _loadCommand.Execute(_answers);
-            //}
-
-            return _answers;
         }
 
-        private object _eventLock = new object();
-        private void AddOnAnswers_CollectionChanged()
+        public  ObservableCollection<Record> Records
         {
-
-            lock (_eventLock)
+            get
             {
-                _answers.CollectionChanged -= Answers_CollectionChanged;
-                _answers.CollectionChanged += Answers_CollectionChanged;
+                return _records ?? (_records = new ObservableCollection<Record>());
             }
 
-        }
-        private void RemoveOnAnswers_CollectionChanged()
-        {
-            lock (_eventLock)
+            set
             {
-                _answers.CollectionChanged -= Answers_CollectionChanged;
+                _records = value;
+                OnPropertyChanged();
             }
-
-        }
-        void Answers_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
-        {
-            OnPropertyChanged("NumAnswers");
         }
         public bool InQuizMode
         {
@@ -148,10 +153,10 @@ namespace EGClassroom.ViewModels
             }
 
         }
-
+        #endregion Members
         public static void AddAnswer(string deviceHandle, string deviceMessage)
         {
-           
+            if (!_mapping.ContainsKey(deviceMessage)) return;
             int existsAnswer = (from ans in _answers where ans.QuestionID == _questionId && ans.DeviceID == deviceHandle select ans).Count();
             if (existsAnswer == 0)
             {
@@ -183,7 +188,56 @@ namespace EGClassroom.ViewModels
             return o;
 
         }
+        private void checkAnswersAgainst(string correctAnswer)
+        {
+            _correctAnswers.Add(correctAnswer);
 
+            _answers.Where(ans => ans.QuestionID == _questionId & ans.StudentAnswer == correctAnswer).ToList().ForEach(
+                 f =>
+                 {
+                     f.Status = AnswerStatusEnum.CORRECT;
+                 }
+             );
+            _answers.Where(ans => ans.QuestionID == _questionId & ans.StudentAnswer != correctAnswer).ToList().ForEach(
+                 f =>
+                 {
+                     f.Status = AnswerStatusEnum.INCORRECT;
+                 }
+            );
+
+            computeRecords();
+
+        }
+
+        private void computeRecords()
+        {
+            var recs = _answers.GroupBy(p => new { p.DeviceID, p.StudentName })
+                .Select(g => new { Name = g.Key.StudentName, ResultsString = string.Join(",", g.OrderBy(h=>h.QuestionID).Select(h => h.StudentAnswer)) });
+            foreach(var rec in recs)
+            {
+                Record oldRecord = _records.Where(r => r.Name == rec.Name).Select(r => r).SingleOrDefault();
+                if(oldRecord == null)
+                {
+                    oldRecord = new Record() { Name = rec.Name, ResultsString = rec.ResultsString };
+                    _records.Add(oldRecord);
+                }
+                else
+                {
+                    oldRecord.ResultsString = rec.ResultsString;
+                }
+            }
+
+            for (int i = 0; i < _records.Count(); i++) 
+            {
+                float score = _correctAnswers.Count();
+                _records[i].Score = string.Format("{0:p1}", (score - CountDifferences(_records[i].ResultsString.Split(',').ToList(), _correctAnswers)) / (float) score);
+            }
+        }
+        private int CountDifferences(List<string> x, List<string> y)
+        {
+            return (x.Zip(y, (a, b) => a.Equals(b) ? 0 : 1).Sum());
+        }
+        #region commands
         public RelayCommand ExportAnswersCommand
         {
             get
@@ -216,18 +270,43 @@ namespace EGClassroom.ViewModels
             }
         }
 
-
-
-        public RelayCommand StopInputCommand
+        public RelayCommand StopInput_A_Command
         {
             get
             {
-                return _stopInputCommand ?? (_stopInputCommand = new RelayCommand(param => {
+                return _stopInput_A_Command ?? (_stopInput_A_Command = new RelayCommand(param => {
                     StopMouse();
                     InQuizMode = false;
+                    checkAnswersAgainst("A");
                 }));
             }
         }
+        public RelayCommand StopInput_B_Command
+        {
+            get
+            {
+                return _stopInput_B_Command ?? (_stopInput_B_Command = new RelayCommand(param => {
+                    StopMouse();
+                    InQuizMode = false;
+                    checkAnswersAgainst("B");
+                }));
+            }
+        }
+        public RelayCommand StopInput_C_Command
+        {
+            get
+            {
+                return _stopInput_C_Command ?? (_stopInput_C_Command = new RelayCommand(param => {
+                    StopMouse();
+                    InQuizMode = false;
+                    checkAnswersAgainst("C");
+                }));
+            }
+        }
+        #endregion commands
+       
+
+#region Dialog
         private void showChooseCSVDialog()
         {
             SaveFileDialog saveFileDialog = new SaveFileDialog();
@@ -242,4 +321,5 @@ namespace EGClassroom.ViewModels
             }
         }
     }
+#endregion Dialog
 }

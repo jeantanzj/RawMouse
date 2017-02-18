@@ -7,10 +7,11 @@ namespace EGClassroom.Models.Interfaces
 {
     public interface IAnswer
     {
-        int QuestionID { get; set; }
-        string DeviceID { get; set; }
+        int QuestionID { get;  }
+        string DeviceID { get;  }
         string StudentName { get; set; }
-        string StudentAnswer { get; set; }
+        string StudentAnswer { get;  }
+        ViewModels.AnswerStatusEnum Status { get;}
         
        
     }

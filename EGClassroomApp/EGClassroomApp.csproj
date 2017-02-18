@@ -71,14 +71,16 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="InverseBoolConverter.cs" />
+    <Compile Include="Models\BaseModel.cs" />
     <Compile Include="Models\Interfaces\IAnswer.cs" />
     <Compile Include="Models\Interfaces\IRegisteredDevice.cs" />
+    <Compile Include="Models\Record.cs" />
     <Compile Include="Models\RegisteredDevices.cs" />
     <Compile Include="MouseCapture.cs" />
+    <Compile Include="ObservableCollectionWithItemNotify.cs" />
+    <Compile Include="ViewModels\AnswerStatusEnum.cs" />
     <Compile Include="ViewModels\BaseViewModel.cs" />
-    <Compile Include="ViewModels\Answer.cs" />
-    <Compile Include="Models\Answers.cs" />
-    <Compile Include="ViewModels\Commands\LoadAnswersCommand.cs" />
+    <Compile Include="Models\Answer.cs" />
     <Compile Include="ViewModels\Commands\LoadDevicesCommand.cs" />
     <Compile Include="ViewModels\Commands\RelayCommand.cs" />
     <Compile Include="ViewModels\CompositeViewModel.cs" />
