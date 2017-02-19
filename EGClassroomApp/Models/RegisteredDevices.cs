@@ -25,7 +25,7 @@ namespace EGClassroom.Models
                 {
                     string deviceId = device.Element("DeviceID").Value;
                     string studentName = device.Element("StudentName").Value;
-                    presets.Add(new RegisteredDevice() { DeviceID = deviceId, StudentName = studentName });
+                    presets.Add(new RegisteredDevice() { DeviceID = deviceId, Name = studentName });
 
                 }
             }

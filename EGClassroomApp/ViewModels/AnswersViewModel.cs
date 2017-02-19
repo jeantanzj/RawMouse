@@ -16,6 +16,7 @@ using System.Reflection;
 using System.Collections.Specialized;
 using System.Windows.Forms;
 using EGClassroom.Helpers;
+using System.IO;
 
 namespace EGClassroom.ViewModels
 {
@@ -35,6 +36,7 @@ namespace EGClassroom.ViewModels
         private static Dictionary<string, string> _mapping;
         private static int _questionId = 0;
         private static bool _inQuizMode = false;
+        private static string _currentCorrectAnswer = null;
 
 
         private MouseCapture _mc;
@@ -62,7 +64,7 @@ namespace EGClassroom.ViewModels
 
         private  void _answers_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
-            OnPropertyChanged("NumAnswers");
+            UpdateNumAnswers();
             if (e.NewItems != null)
                 foreach (Answer item in e.NewItems)
                     item.PropertyChanged += answer_PropertyChanged;
@@ -77,23 +79,16 @@ namespace EGClassroom.ViewModels
             OnPropertyChanged("Answers");
         }
 
-        internal void StopMouse()
-        {
-            _mc.RemoveOnMouseClicked();
-        }
-        internal bool StartMouse()
-        {
-            _mc.RemoveOnMouseClicked();
-            return _mc.AddOnMouseClicked();
-        }
 #region Members
-        public static ObservableCollection<Answer> Answers {
-            get {
-                    return _answers ?? (_answers = new ObservableCollection<Answer>());
+        public static ObservableCollection<Answer> Answers
+        {
+            get
+            {
+                return _answers ?? (_answers = new ObservableCollection<Answer>());
             }
         }
 
-        public  ObservableCollection<Record> Records
+        public ObservableCollection<Record> Records
         {
             get
             {
@@ -146,36 +141,81 @@ namespace EGClassroom.ViewModels
         public int NumAnswers
         {
             get
-            {              
+            {
                 int numAns = (from ans in _answers where ans.QuestionID == _questionId select ans).Count();
                 System.Diagnostics.Debug.Print("numAns: " + numAns);
                 return numAns;
             }
 
         }
-        #endregion Members
+
+        public string CurrentCorrectAnswer
+        {
+            get
+            {
+                return _currentCorrectAnswer;
+            }
+
+            set
+            {
+                _currentCorrectAnswer = value;
+                OnPropertyChanged();
+            }
+        }
+
+#endregion Members
+
+
+        internal void StopMouse()
+        {
+            _mc.RemoveOnMouseClicked();
+        }
+        internal bool StartMouse()
+        {
+            _mc.RemoveOnMouseClicked();
+            return _mc.AddOnMouseClicked();
+        }
+
+
+        private void UpdateNumAnswers()
+        {
+            OnPropertyChanged("NumAnswers");
+        }
         public static void AddAnswer(string deviceHandle, string deviceMessage)
         {
             if (!_mapping.ContainsKey(deviceMessage)) return;
             int existsAnswer = (from ans in _answers where ans.QuestionID == _questionId && ans.DeviceID == deviceHandle select ans).Count();
+           
             if (existsAnswer == 0)
             {
-                string studentName = getStudentName(deviceHandle);
+                RegisteredDevice device = (from dev in RegisteredDevicesViewModel.RegDevices
+                                           where dev.DeviceID == deviceHandle
+                                           select dev).FirstOrDefault();
+                if (device == null)
+                {
+                    RegisteredDevicesViewModel.doRegisterMouseClick(deviceHandle);
+                }
+                else if (device.Role == RoleEnum.TEACHER) {
+                    return;
+                }
+
                 string studentAnswer = getStudentAnswer(deviceMessage);
-                _answers.Insert(0, new Answer() { QuestionID = _questionId, DeviceID = deviceHandle, StudentName = studentName, StudentAnswer = studentAnswer });
-                log.Debug(String.Format("Inserted: {0}, {1}, {2}, {3} ", _questionId, deviceHandle, studentName, studentAnswer));
+                Answer ans = new Answer() { QuestionID = _questionId, DeviceID = deviceHandle, StudentAnswer = studentAnswer };
+                ans.setStudentName(RegisteredDevicesViewModel.RegDevices);
+                _answers.Insert(0, ans );
+                log.Debug("Inserted: " + ans);
 
             };
         }
 
-        private static string getStudentName(string deviceID)
+        private static string existsStudent(string deviceID)
         {
 
-            var sname = from dev in RegisteredDevicesViewModel.RegDevices where dev.DeviceID == deviceID select dev.StudentName;
+            var sname = from dev in RegisteredDevicesViewModel.RegDevices where dev.DeviceID == deviceID select dev.Name;
             if (sname.Count() == 0)
             {
                 RegisteredDevicesViewModel.doRegisterMouseClick(deviceID);
-                sname = from dev in RegisteredDevicesViewModel.RegDevices where dev.DeviceID == deviceID select dev.StudentName;
+                sname = from dev in RegisteredDevicesViewModel.RegDevices where dev.DeviceID == deviceID select dev.Name;
             }
             return sname.First().ToString();
 
@@ -191,6 +231,7 @@ namespace EGClassroom.ViewModels
         private void checkAnswersAgainst(string correctAnswer)
         {
             _correctAnswers.Add(correctAnswer);
+            CurrentCorrectAnswer = String.Format("The answer was '{0}'.",correctAnswer);
 
             _answers.Where(ans => ans.QuestionID == _questionId & ans.StudentAnswer == correctAnswer).ToList().ForEach(
                  f =>
@@ -212,13 +253,17 @@ namespace EGClassroom.ViewModels
         private void computeRecords()
         {
             var recs = _answers.GroupBy(p => new { p.DeviceID, p.StudentName })
-                .Select(g => new { Name = g.Key.StudentName, ResultsString = string.Join(",", g.OrderBy(h=>h.QuestionID).Select(h => h.StudentAnswer)) });
+                .Select(g => new { Name = g.Key.StudentName, ResultsString = string.Join(",", g.OrderBy(h=>h.QuestionID).Select(h => h.StudentAnswer)) }).
+                OrderBy(i => i.Name);
             foreach(var rec in recs)
             {
                 Record oldRecord = _records.Where(r => r.Name == rec.Name).Select(r => r).SingleOrDefault();
                 if(oldRecord == null)
                 {
-                    oldRecord = new Record() { Name = rec.Name, ResultsString = rec.ResultsString };
+                    String filePath = Path.Combine(
+                               Directory.GetParent( Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location)
+                                                   ).Parent.FullName, @"Resources\boy.png"); //TODO: Set path during reg dev
+                    oldRecord = new Record() { Name = rec.Name, ResultsString = rec.ResultsString , Image = filePath};
                     _records.Add(oldRecord);
                 }
                 else
@@ -229,8 +274,9 @@ namespace EGClassroom.ViewModels
 
             for (int i = 0; i < _records.Count(); i++) 
             {
-                float score = _correctAnswers.Count();
-                _records[i].Score = string.Format("{0:p1}", (score - CountDifferences(_records[i].ResultsString.Split(',').ToList(), _correctAnswers)) / (float) score);
+                int total = _correctAnswers.Count();
+                int numCorrect = total - CountDifferences(_records[i].ResultsString.Split(',').ToList(), _correctAnswers);
+                _records[i].Score = string.Format("{0} of {1} ({2:p2}%)", numCorrect, total, (float)numCorrect / total);
             }
         }
         private int CountDifferences(List<string> x, List<string> y)
@@ -263,6 +309,8 @@ namespace EGClassroom.ViewModels
 
                          QuestionID += 1;
                          InQuizMode = true;
+                         CurrentCorrectAnswer = null;
+                         UpdateNumAnswers();
                          log.Debug(String.Format("Start getting answers for qn {0} ", _questionId));
                          return;
                      }
@@ -303,10 +351,12 @@ namespace EGClassroom.ViewModels
                 }));
             }
         }
-        #endregion commands
-       
 
-#region Dialog
+      
+        #endregion commands
+
+
+        #region Dialog
         private void showChooseCSVDialog()
         {
             SaveFileDialog saveFileDialog = new SaveFileDialog();
@@ -322,4 +372,6 @@ namespace EGClassroom.ViewModels
         }
     }
 #endregion Dialog
+
+ 
 }

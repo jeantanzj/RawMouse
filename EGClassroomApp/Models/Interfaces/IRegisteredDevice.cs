@@ -8,6 +8,6 @@ namespace EGClassroom.Models.Interfaces
     interface IRegisteredDevice
     {
         string DeviceID { get; set; }
-        string StudentName { get; set; }
+        string Name { get; set; }
     }
 }

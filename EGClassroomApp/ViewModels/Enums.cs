@@ -12,4 +12,10 @@ namespace EGClassroom.ViewModels
         CORRECT,
         INCORRECT,
     }
+
+    public enum RoleEnum
+    {
+        STUDENT,
+        TEACHER
+    }
 }

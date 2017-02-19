@@ -55,6 +55,7 @@ namespace EGClassroom.ViewModels
                 {
                     RegisteredDevicesViewModel.RegDevices.Clear();
                     AnswersViewModel.Answers.Clear();
+                    answersVM.Records.Clear();
                     answersVM.QuestionID = 0;
                 }));
             }

@@ -9,8 +9,9 @@
             Height="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=Height}"
             Width="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=Width}"
              xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid">
-
+    <ScrollViewer>
     <DockPanel Name="dp_quizview">
+        
         <!--<DockPanel.DataContext>
             <viewmodel:CompositeViewModel/>
         </DockPanel.DataContext>-->
@@ -19,38 +20,55 @@
             <MenuItem Header="Answer View" Command="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.ToAnswerWindowViewCommand}"/>
           
         </Menu>
-        <DockPanel HorizontalAlignment="Stretch" 
-            VerticalAlignment="Stretch" 
-            Height="Auto">
-            <WrapPanel DockPanel.Dock="Bottom" VerticalAlignment="Stretch" 
-                Height="150" DataContext="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.answersVM}">
-                <!--<Button Margin="10,10" Content="Receive Input" Command="{Binding quizVM.ReceiveInputCommand}"
-                        IsEnabled="{Binding Path=quizVM.InQuizMode,Mode=Default,UpdateSourceTrigger=PropertyChanged, Converter={StaticResource InvertBool}}"/>
-                <Button Margin="10,10" Content="Stop" Command="{Binding quizVM.StopInputCommand}"
-                         IsEnabled="{Binding Path=quizVM.InQuizMode, Mode=Default,UpdateSourceTrigger=PropertyChanged}"/>-->
-                
-               
-                    <Label Content="Quiz Mode:"/>
-                    <Label Content="{Binding Path=InQuizMode,Mode=Default,UpdateSourceTrigger=PropertyChanged}"/>
+        
+
+            <StackPanel DockPanel.Dock="Bottom" >
+            <GroupBox
+                DockPanel.Dock="Top"
+                Height="600">
+                <!--DataContext="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.quizVM}"> -->
+                <WebBrowser Name="wb_ppt" viewmodel:QuizViewModel.BindableSource="{Binding PPTWebAddress}" />
+            </GroupBox>
+            <WrapPanel Height="150" DataContext="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.answersVM}" >
+                <WrapPanel.Resources>
+                    <Style TargetType="Label">
+                        <Setter Property="FontSize" Value="20"/>
+                    </Style>
+                    <Style TargetType="TextBlock">
+                        <Setter Property="FontSize" Value="20"/>
+                    </Style>
+                </WrapPanel.Resources>
+                <Label Content="Quiz Mode:"/>
+                    <Label>
+                        <Label.Style>
+                            <Style TargetType="{x:Type Label}">
+                                <Setter Property="FontSize" Value="20"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Path=InQuizMode,UpdateSourceTrigger=PropertyChanged}" Value="True">
+                                        <Setter Property="Label.Content" Value="STARTED" />
+                                        <Setter Property="Label.Foreground" Value="#339933"/>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding Path=InQuizMode,UpdateSourceTrigger=PropertyChanged}" Value="False">
+                                        <Setter Property="Label.Content" Value="STOPPED" />
+                                        <Setter Property="Label.Foreground" Value="#D13438"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Label.Style>
+                    </Label>
                     <Label Content="Current Question:"/>
-                    <Label Content="{Binding Path=QuestionID,Mode=Default,UpdateSourceTrigger=PropertyChanged}"/>
+                    <Label Content="{Binding Path=QuestionID}"/>
                     <Label Content="Answers Received: "/>
                     <Label Content="{Binding Path=NumAnswers}"/>
                     <!--<Label Content="{Binding Path=regDevicesVM.RegDevices.Count}"/>-->
-                  
-                
+                    <Label Content="{Binding Path=CurrentCorrectAnswer}" Foreground="#339933"/>
+
+
             </WrapPanel>
             
-            <GroupBox
-                DockPanel.Dock="Top" 
-                Header="Quiz" 
-                HorizontalAlignment="Stretch"
-                 Width="Auto" 
-                Height="Auto" DataContext="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.quizVM}">
-                <WebBrowser Name="wb_ppt" viewmodel:QuizViewModel.BindableSource="{Binding PPTWebAddress}" Margin="5"/>
-        </GroupBox>
+            </StackPanel>
 
-           
+
         </DockPanel>
-    </DockPanel>
+    </ScrollViewer>
 </UserControl>

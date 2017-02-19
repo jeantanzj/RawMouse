@@ -14,6 +14,7 @@
         <g:InverseBoolConverter x:Key="InvertBool"/>
     </UserControl.Resources>
     <!--The MainWindow's DataContext is the CompositeViewModel-->
+    <ScrollViewer>
     <DockPanel DataContext="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.answersVM}">
       
         <Menu DockPanel.Dock="Top">
@@ -24,15 +25,15 @@
         
         <StackPanel>
             <StackPanel Margin="5,0">
-                    <Button Margin="10,10" Content="Receive Input" Command="{Binding ReceiveInputCommand}"
+                    <Button Margin="20,10" Padding="20,10" Background="#1BA1E2" Content="Start getting responses" Command="{Binding ReceiveInputCommand}"
                         IsEnabled="{Binding Path=InQuizMode,Mode=Default,UpdateSourceTrigger=PropertyChanged, Converter={StaticResource InvertBool}}"/>
-                <Label Content="Choose the correct answer to stop receiving input"/>
-                <WrapPanel>
-                    <Button Margin="10,10" Padding="10,0" Content="A" Command="{Binding StopInput_A_Command}"
+                    <Label HorizontalAlignment="Center" Content="Choose the correct answer to stop recording responses"/>
+                    <WrapPanel HorizontalAlignment="Center">
+                    <Button Margin="10,10" Padding="20,10" Content="A" Command="{Binding StopInput_A_Command}"
                          IsEnabled="{Binding Path=InQuizMode, Mode=Default,UpdateSourceTrigger=PropertyChanged}"/>
-                    <Button Margin="10,10" Padding="10,0" Content="B" Command="{Binding StopInput_B_Command}"
+                    <Button Margin="10,10" Padding="20,10" Content="B" Command="{Binding StopInput_B_Command}"
                          IsEnabled="{Binding Path=InQuizMode, Mode=Default,UpdateSourceTrigger=PropertyChanged}"/>
-                    <Button Margin="10,10" Padding="10,0" Content="C" Command="{Binding StopInput_C_Command}"
+                    <Button Margin="10,10" Padding="20,0" Content="C" Command="{Binding StopInput_C_Command}"
                          IsEnabled="{Binding Path=InQuizMode, Mode=Default,UpdateSourceTrigger=PropertyChanged}"/>
                 </WrapPanel>
                 
@@ -46,20 +47,16 @@
                     Grid.Column="0"
                     AutoGenerateColumns="True"
                     HorizontalAlignment="Stretch" Name="datagrid_answer" VerticalAlignment="Top"
-                    ItemsSource="{Binding Answers}" IsReadOnly="True"
-                />
+                    ItemsSource="{Binding Answers}" IsReadOnly="True"/>
 
                 <ItemsControl ItemsSource="{Binding Records}" Grid.Column="1">
 
-                    <ItemsControl.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <UniformGrid Columns="1"/>
-                        </ItemsPanelTemplate>
-                    </ItemsControl.ItemsPanel>
-
-
-
-                    <ItemsControl.ItemTemplate>
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <UniformGrid Columns="1"/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
                         <DataTemplate>
                             <WrapPanel Orientation="Horizontal">
                                 <Grid Margin="0,5,0,0">
@@ -85,4 +82,5 @@
             
         </StackPanel>
     </DockPanel>
+    </ScrollViewer>
 </UserControl>

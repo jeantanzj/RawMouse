@@ -136,7 +136,8 @@ namespace EGClassroom.ViewModels
         public static void doRegisterMouseClick(string deviceID)
         {
             
-            RegisteredDevice device = new RegisteredDevice() { DeviceID = deviceID, StudentName = "Student_" + _regDevices.Count };
+            RegisteredDevice device = new RegisteredDevice() { DeviceID = deviceID, Name = "Student_" + _regDevices.Count };
+            if (_regDevices.Count() == 0) device.Role = RoleEnum.TEACHER;
             _regDevices.Add(device);
             log.Debug("Registered: " + device);
 
@@ -145,7 +146,7 @@ namespace EGClassroom.ViewModels
         {
            
            if (string.IsNullOrEmpty(MouseCapture.deviceHandle)) return;
-           int existsDevice = (from dev in _regDevices where dev.DeviceID == MouseCapture.deviceHandle select dev).Count();
+           int existsDevice = (from dev in _regDevices where dev.DeviceID == MouseCapture.deviceHandle & dev.Role != RoleEnum.TEACHER select dev).Count();
            if (existsDevice == 0)
             {
                 doRegisterMouseClick(MouseCapture.deviceHandle);

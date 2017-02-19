@@ -6,6 +6,7 @@ using EGClassroom.Models.Interfaces;
 using System.ComponentModel;
 using EGClassroom.ViewModels;
 using System.Runtime.CompilerServices;
+using System.Collections.ObjectModel;
 
 namespace EGClassroom.Models
 {
@@ -52,11 +53,16 @@ namespace EGClassroom.Models
                 return _studentName;
             }
 
-            set
+            private set
             {
                 _studentName = value;
                 OnPropertyChanged();
             }
+        }
+
+        public void setStudentName(ObservableCollection<RegisteredDevice> regDevices)
+        {
+            StudentName = (from dev in regDevices where dev.DeviceID == _deviceID select dev.Name).FirstOrDefault();
         }
 
         public string StudentAnswer
@@ -87,7 +93,12 @@ namespace EGClassroom.Models
             }
         }
 
-      
+        public override string ToString()
+        {
+            return String.Format("{0}, {1}, {2}, {3} ", _questionID, _deviceID, _studentName, _studentAnswer); 
+        }
+
+
     }
 
 }

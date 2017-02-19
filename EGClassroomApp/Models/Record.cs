@@ -11,6 +11,7 @@ namespace EGClassroom.Models
         private string _name;
         private string _resultsString;
         private string _score;
+        private string _image;
         public string Name
         {
             get
@@ -21,7 +22,7 @@ namespace EGClassroom.Models
             set
             {
                 _name = value;
-                OnPropertyChanged("Name");
+                OnPropertyChanged();
             }
         }
 
@@ -36,7 +37,7 @@ namespace EGClassroom.Models
             set
             {
                 _resultsString = value;
-                OnPropertyChanged("ResultsString");
+                OnPropertyChanged();
             }
         }
 
@@ -49,10 +50,23 @@ namespace EGClassroom.Models
             set
             {
                 _score = value;
-                OnPropertyChanged("Score");
+                OnPropertyChanged();
             }
         }
 
+        public string Image
+        {
+            get
+            {
+                return _image;
+            }
+
+            set
+            {
+                _image = value;
+                OnPropertyChanged();
+            }
+        }
     }
 
 }

@@ -20,44 +20,28 @@
                 Path=DataContext.ResetAllCommand}"/>
         </Menu>
         <StackPanel>
-                <Grid Margin="0,5">
 
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="2*"/>
-                        <RowDefinition Height="8*"/>
-                    </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="1*" />
-                        <ColumnDefinition Width="2*" />
-                    </Grid.ColumnDefinitions>
-                    <Label Grid.Column="0" Grid.Row="0" Content="Welcome to the classroom app"/>
-                    <!--<Button Grid.Column="0" Grid.Row ="1" Content="Choose PPT" Command="{Binding ChoosePPTCommand}" />-->
-                <TextBlock Grid.Column="0" Grid.Row ="1" Text="Paste PPT URL: "/>
-                <TextBox Grid.Column="1" Grid.Row="1" AcceptsReturn="False" Text="{Binding Path=PPTWebAddress}"></TextBox>
-                </Grid>
-                <StackPanel Margin="0,10,0,0">
+                <Label Margin="5,0" Content="Welcome to the classroom app"/>
+                <WrapPanel Margin="5,0">
+                    <Label Content="Paste PPT URL:"/>
+                    <TextBox AcceptsReturn="False" Text="{Binding Path=PPTWebAddress}"/>
+                </WrapPanel>
+                
+                <StackPanel Margin="5,5">
+                
+                <UniformGrid Rows="1" Columns="3" Margin="10">
+                    <Button Margin="2"  Height="50" Content="Press here using device to register" Background="#1BA1E2"
+                            Command="{Binding RegisterCommand}"/>
+                    <Button Margin="2"  Height="50" Content="Press here when complete" Command="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.ToQuizViewAndToAnswerWindowViewCommand}"/>
 
+                </UniformGrid>
 
-                    <DataGrid 
+                <DataGrid Margin="10"
                 AutoGenerateColumns="True"
-                HorizontalAlignment="Stretch" Name="datagrid_devices" VerticalAlignment="Top"
+                HorizontalAlignment="Stretch" Name="datagrid_devices"
                 ItemsSource="{Binding RegDevices}"
                 />
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="8*" MinHeight="80"/>
-                            <RowDefinition Height="2*" MinHeight="20"/>
-                        </Grid.RowDefinitions>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="2*" />
-                            <ColumnDefinition Width="1*" />
-                        </Grid.ColumnDefinitions>
-
-                     <Button Margin="10,10"  Grid.Column="0"  Grid.Row="0" Content="Press here using device to register" Command="{Binding RegisterCommand}"/>
-                    <Button Margin="10,10" Grid.Column="1"  Grid.Row="0"  Content="Press here when complete" Command="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.ToQuizViewAndToAnswerWindowViewCommand}"/>
-                        <TextBlock Margin="10,0" Grid.Row="1" Text="{Binding Path=Messages}"/>
-                    </Grid>
-                </StackPanel>
+            </StackPanel>
             </StackPanel>
     </DockPanel>
     

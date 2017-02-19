@@ -9,7 +9,7 @@ namespace EGClassroom.Models.Interfaces
     {
         int QuestionID { get;  }
         string DeviceID { get;  }
-        string StudentName { get; set; }
+        string StudentName { get;  }
         string StudentAnswer { get;  }
         ViewModels.AnswerStatusEnum Status { get;}
         

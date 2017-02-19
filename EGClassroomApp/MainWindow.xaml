@@ -7,10 +7,9 @@
         xmlns:local="clr-namespace:EGClassroom.Views"
         mc:Ignorable="d"
         xmlns:viewmodel="clr-namespace:EGClassroom.ViewModels"
-        Title="MainWindow"
+        Title="EGClassroom App"
         Height="{x:Static SystemParameters.PrimaryScreenHeight}" 
         Width="{x:Static SystemParameters.PrimaryScreenWidth}" 
-        WindowState="Maximized" 
         xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid">
     <!--<Window.DataContext>
         <viewmodel:CompositeViewModel/> 
