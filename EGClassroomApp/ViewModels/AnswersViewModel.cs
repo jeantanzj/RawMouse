@@ -254,18 +254,21 @@ namespace EGClassroom.ViewModels
 
         private void computeRecords()
         {
-            var recs = _answers.GroupBy(p => new { p.DeviceID, p.StudentName })
-                .Select(g => new { Name = g.Key.StudentName, ResultsString = string.Join(",", g.OrderBy(h=>h.QuestionID).Select(h => h.StudentAnswer)) }).
-                OrderBy(i => i.Name);
-            foreach(var rec in recs)
+            var recs = _answers.GroupBy(grp => new { grp.DeviceID })
+                .Select(g => new {
+                    g.Key.DeviceID,
+                    ResultsString = string.Join(",", g.OrderBy(h=>h.QuestionID).Select(h => h.StudentAnswer)) })
+                .Join(RegisteredDevicesViewModel.RegDevices, a => a.DeviceID, b => b.DeviceID,
+                    (a, b) => new { Name=b.Name, ResultsString = a.ResultsString, ImagePath = b.ImagePath })
+                .OrderBy(i => i.Name);
+
+             
+            foreach (var rec in recs)
             {
                 Record oldRecord = _records.Where(r => r.Name == rec.Name).Select(r => r).SingleOrDefault();
                 if(oldRecord == null)
                 {
-                    String filePath = Path.Combine(
-                               Directory.GetParent( Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location)
-                                                   ).Parent.FullName, @"Resources\boy.png"); //TODO: Set path during reg dev
-                    oldRecord = new Record() { Name = rec.Name, ResultsString = rec.ResultsString , Image = filePath};
+                    oldRecord = new Record() { Name = rec.Name, ResultsString = rec.ResultsString , Image = rec.ImagePath};
                     _records.Add(oldRecord);
                 }
                 else

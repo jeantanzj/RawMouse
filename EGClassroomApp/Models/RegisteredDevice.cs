@@ -11,6 +11,7 @@ namespace EGClassroom.Models
     {
         private string _name;
         private string _deviceID;
+        private string _imagePath;
         private RoleEnum _role;
         public string DeviceID
         {
@@ -52,6 +53,23 @@ namespace EGClassroom.Models
                 if (value != _role)
                 {
                     _role = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        public string ImagePath
+        {
+            get
+            {
+                return _imagePath;
+            }
+
+            set
+            {
+                if (value != _imagePath)
+                {
+                    _imagePath = value;
                     OnPropertyChanged();
                 }
             }

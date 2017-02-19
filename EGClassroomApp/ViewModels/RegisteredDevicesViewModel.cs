@@ -11,6 +11,7 @@ using EGClassroom.Models;
 using System.Windows;
 using log4net;
 using System.Reflection;
+using System.IO;
 
 namespace EGClassroom.ViewModels
 {
@@ -28,7 +29,7 @@ namespace EGClassroom.ViewModels
         private static string _pptWebAddress = "https://docs.google.com/presentation/d/1xjzWvL0Rk7pqMZBrdfdgMPwBbij3HO6Xod-A0GwpsAg/present#slide=id.p";
         private static string _messages = "No messages";
         private MouseCapture _mc;
-
+        private static string[] _defaultAvatars = new string[] { "boy-0", "boy-1", "boy-2", "boy-3", "boy-4", "girl-0", "girl-1", "girl-2", "girl-3", "girl-4" };
         public RegisteredDevicesViewModel( ){
             _loadDevicesCommand = new LoadDevicesCommand();
             _regDevices = GetRegisteredDevices();
@@ -143,8 +144,12 @@ namespace EGClassroom.ViewModels
         }
         public static void doRegisterMouseClick(string deviceID)
         {
+            string avatar = _defaultAvatars.OrderBy(x => Guid.NewGuid()).Take(1).Single();
+            String filePath = Path.Combine(
+                             Directory.GetParent(Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location)
+                                                 ).Parent.FullName, String.Format(@"Resources\{0}.png",avatar));
             
-            RegisteredDevice device = new RegisteredDevice() { DeviceID = deviceID, Name = "Student_" + _regDevices.Count };
+            RegisteredDevice device = new RegisteredDevice() { DeviceID = deviceID, Name = "Student_" + _regDevices.Count, ImagePath = filePath };
             if (_regDevices.Count() == 0) device.Role = RoleEnum.TEACHER;
             _regDevices.Add(device);
             log.Debug("Registered: " + device);
