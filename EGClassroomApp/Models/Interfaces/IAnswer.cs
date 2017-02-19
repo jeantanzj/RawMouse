@@ -12,7 +12,6 @@ namespace EGClassroom.Models.Interfaces
         string StudentName { get;  }
         string StudentAnswer { get;  }
         ViewModels.AnswerStatusEnum Status { get;}
-        
        
     }
 }

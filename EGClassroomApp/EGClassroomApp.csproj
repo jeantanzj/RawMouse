@@ -78,6 +78,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Helper\WebBrowserUtility.cs" />
     <Compile Include="InverseBoolConverter.cs" />
     <Compile Include="Models\BaseModel.cs" />
     <Compile Include="Models\Interfaces\IAnswer.cs" />
@@ -85,8 +86,7 @@
     <Compile Include="Models\Record.cs" />
     <Compile Include="Models\RegisteredDevices.cs" />
     <Compile Include="MouseCapture.cs" />
-    <Compile Include="ObservableCollectionWithItemNotify.cs" />
-    <Compile Include="ViewModels\AnswerStatusEnum.cs" />
+    <Compile Include="Helper\Enums.cs" />
     <Compile Include="ViewModels\BaseViewModel.cs" />
     <Compile Include="Models\Answer.cs" />
     <Compile Include="ViewModels\Commands\LoadDevicesCommand.cs" />
@@ -96,8 +96,8 @@
     <Compile Include="ViewModels\AnswersViewModel.cs" />
     <Compile Include="ViewModels\Interfaces\IQuizViewModel.cs" />
     <Compile Include="ViewModels\Interfaces\IRegisteredDeviceViewModel.cs" />
+    <Compile Include="Models\RegisteredDevice.cs" />
     <Compile Include="ViewModels\QuizViewModel.cs" />
-    <Compile Include="ViewModels\RegisteredDevice.cs" />
     <Compile Include="ViewModels\RegisteredDevicesViewModel.cs" />
     <Compile Include="Views\AnswerView.xaml.cs">
       <DependentUpon>AnswerView.xaml</DependentUpon>
@@ -111,7 +111,7 @@
     <Compile Include="Views\RegisteredDeviceView.xaml.cs">
       <DependentUpon>RegisteredDeviceView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="WriteToFile.cs" />
+    <Compile Include="Helper\WriteToFile.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -176,7 +176,12 @@
   <ItemGroup>
     <Resource Include="Resources\PresetDevices.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
     </Resource>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\boy.png" />
+    <Resource Include="Resources\girl.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

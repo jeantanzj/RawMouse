@@ -29,7 +29,7 @@ namespace EGClassroom.ViewModels
             
             answersVM = new AnswersViewModel();
             regDevicesVM = new RegisteredDevicesViewModel();
-            quizVM = new QuizViewModel(regDevicesVM.PPTWebAddress);
+            quizVM = new QuizViewModel();
            
         }
 
@@ -53,10 +53,9 @@ namespace EGClassroom.ViewModels
             {
                 return _resetAllCommand ?? (_resetAllCommand = new RelayCommand(param =>
                 {
-                    RegisteredDevicesViewModel.RegDevices.Clear();
-                    AnswersViewModel.Answers.Clear();
-                    answersVM.Records.Clear();
-                    answersVM.QuestionID = 0;
+                    regDevicesVM.Reset();
+                    answersVM.Reset();
+                    quizVM.Reset();
                 }));
             }
         }

@@ -1,21 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using EGClassroom.ViewModels.Interfaces;
-using System.Windows.Input;
 using System.Collections.ObjectModel;
 using EGClassroom.Models;
 using EGClassroom.ViewModels.Commands;
 using System.ComponentModel;
-using System.Windows.Threading;
-using EGClassroom.ViewModels;
-using System.Windows.Controls;
 using log4net;
 using System.Reflection;
 using System.Collections.Specialized;
 using System.Windows.Forms;
-using EGClassroom.Helpers;
 using System.IO;
 
 namespace EGClassroom.ViewModels
@@ -176,6 +170,14 @@ namespace EGClassroom.ViewModels
             return _mc.AddOnMouseClicked();
         }
 
+        public void Reset()
+        {
+            Answers.Clear();
+            Records.Clear();
+            _correctAnswers.Clear();
+            InQuizMode = false;
+            QuestionID = 0;
+        }
 
         private void UpdateNumAnswers()
         {

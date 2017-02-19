@@ -19,30 +19,50 @@
             <MenuItem Header="Reset" Command="{Binding RelativeSource={RelativeSource AncestorType=Window},
                 Path=DataContext.ResetAllCommand}"/>
         </Menu>
-        <StackPanel>
+        
 
-                <Label Margin="5,0" Content="Welcome to the classroom app"/>
-                <WrapPanel Margin="5,0">
-                    <Label Content="Paste PPT URL:"/>
-                    <TextBox AcceptsReturn="False" Text="{Binding Path=PPTWebAddress}"/>
+
+            <Grid Margin="20">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="95"/>
+                    <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1.5*" />
+                    <ColumnDefinition Width="1*" />
+                </Grid.ColumnDefinitions>
+            <StackPanel Grid.Row="0" Grid.Column="0" >
+                <TextBlock FontSize="14" Text="Welcome to the classroom app from Engineering Good!"/>
+                <TextBlock Text="Paste PPT URL or browse to a pdf:"/>
+                <WrapPanel Width="Auto" HorizontalAlignment="Stretch" >
+                    <TextBox Grid.Row="1" Grid.Column="0" AcceptsReturn="False" Width="250" Text="{Binding Path=PPTWebAddress}"/>
+                    <Button Grid.Row="1" Grid.Column="1" Content="Browse" Width="100" Command="{Binding ChooseLocalFileCommand}"/>
                 </WrapPanel>
-                
-                <StackPanel Margin="5,5">
-                
-                <UniformGrid Rows="1" Columns="3" Margin="10">
-                    <Button Margin="2"  Height="50" Content="Press here using device to register" Background="#1BA1E2"
+                <TextBlock FontSize="10" Text="Accepted formats are 'http://...' or 'https://...' or 'file:///&lt;path to pdf on disk&gt;.pdf' "/>
+            </StackPanel>
+            <Button Grid.Row ="1" Grid.Column="0"  Height="300" Width="Auto" 
+                            Content="Place cursor here and click using device to register" Background="#1BA1E2"
                             Command="{Binding RegisterCommand}"/>
-                    <Button Margin="2"  Height="50" Content="Press here when complete" Command="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.ToQuizViewAndToAnswerWindowViewCommand}"/>
+            <Grid Grid.Row ="1" Grid.Column="1"  >
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="4*"/>
+                        <RowDefinition Height="1*"/>
+                    </Grid.RowDefinitions>
+                    <DataGrid Grid.Row="0" Margin="10"
+                    AutoGenerateColumns="True"
+                    HorizontalAlignment="Stretch" Name="datagrid_devices"
+                    ItemsSource="{Binding RegDevices}"
+                    />
 
-                </UniformGrid>
+                    <Button Grid.Row="1"
+                            Margin="2"  Height="Auto" Content="Show the quiz!" 
+                            Command="{Binding RelativeSource={RelativeSource AncestorType=Window}, 
+                            Path=DataContext.ToQuizViewAndToAnswerWindowViewCommand}"/>
+                </Grid>
+                
 
-                <DataGrid Margin="10"
-                AutoGenerateColumns="True"
-                HorizontalAlignment="Stretch" Name="datagrid_devices"
-                ItemsSource="{Binding RegDevices}"
-                />
-            </StackPanel>
-            </StackPanel>
+            </Grid>
+ 
     </DockPanel>
     
 </UserControl>

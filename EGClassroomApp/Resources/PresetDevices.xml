@@ -1,9 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <PresetDevices>
-  <device>
+  <!--<device>
     <DeviceID>65589</DeviceID>
     <StudentName>Jean</StudentName>
-  </device>
+  </device>-->
   <!--<device>
     <DeviceID></DeviceID>
     <StudentName></StudentName>

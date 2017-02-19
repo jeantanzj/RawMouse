@@ -10,5 +10,6 @@ namespace EGClassroom.ViewModels.Interfaces
     public interface IRegisteredDeviceViewModel
     {
         ObservableCollection<RegisteredDevice> GetRegisteredDevices();
+        void Reset();
     }
 }

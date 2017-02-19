@@ -10,7 +10,7 @@ using System.Collections.ObjectModel;
 
 namespace EGClassroom.Models
 {
-    public class Answer : BaseModel,IAnswer
+    public class Answer : BaseModel, IAnswer
     {
         private int _questionID;
         private string _deviceID;

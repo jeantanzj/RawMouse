@@ -21,7 +21,8 @@ namespace EGClassroom.ViewModels
         private static ObservableCollection<RegisteredDevice> _regDevices;
         private ICommand _loadDevicesCommand;
         private RelayCommand _registerCommand;
-        
+        private RelayCommand _chooseLocalFileCommand;
+
         //private RelayCommand _choosePPTCommand;
         //private static string _pptFilePath = "...";
         private static string _pptWebAddress = "https://docs.google.com/presentation/d/1xjzWvL0Rk7pqMZBrdfdgMPwBbij3HO6Xod-A0GwpsAg/present#slide=id.p";
@@ -36,15 +37,6 @@ namespace EGClassroom.ViewModels
             StartMouse();
         }
 
-        internal void StopMouse()
-        {
-            _mc.RemoveOnMouseClicked();
-        }
-        internal bool StartMouse()
-        {
-            _mc.RemoveOnMouseClicked();
-            return _mc.AddOnMouseClicked();
-        }
 
         public static ObservableCollection<RegisteredDevice> RegDevices
         {
@@ -95,6 +87,8 @@ namespace EGClassroom.ViewModels
                 }
             }
         }
+
+
        
         public RelayCommand RegisterCommand
         {
@@ -104,35 +98,49 @@ namespace EGClassroom.ViewModels
               param => doRegisterMouseClick() ));
             }
         }
-        
-       
-       
-
-        //public RelayCommand ChoosePPTCommand
-        //{
-        //    get
-        //    {
-        //        return _choosePPTCommand ?? (_choosePPTCommand = new RelayCommand(
-        //      param => showChoosePPTDialog()));
-        //    }
-        //}
-
-        //private void showChoosePPTDialog()
-        //{
-        //    Microsoft.Win32.OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog();
-        //    dlg.DefaultExt = "PowerPoint Presentations|*.ppt;*.pptx";
-        //    dlg.Filter = "PowerPoint Presentations|*.ppt;*.pptx";
 
 
-        //    Nullable<bool> result = dlg.ShowDialog();
 
-        //    if (result.HasValue && result.Value)
-        //    {
-        //        PPTFilePath = dlg.FileName;
-        //    }
 
-        //}
+        public RelayCommand ChooseLocalFileCommand
+        {
+            get
+            {
+                return _chooseLocalFileCommand ?? (_chooseLocalFileCommand = new RelayCommand(
+              param => showChooseLocalFileDialog()));
+            }
+        }
 
+        private void showChooseLocalFileDialog()
+        {
+            Microsoft.Win32.OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog();
+            dlg.DefaultExt = "Portable Document Format|*.pdf";
+            dlg.Filter = "Portable Document Format|*.pdf";
+
+
+            Nullable<bool> result = dlg.ShowDialog();
+
+            if (result.HasValue && result.Value)
+            {
+                PPTWebAddress = String.Format("file:///{0}",dlg.FileName);
+            }
+
+        }
+        internal void StopMouse()
+        {
+            _mc.RemoveOnMouseClicked();
+        }
+        internal bool StartMouse()
+        {
+            _mc.RemoveOnMouseClicked();
+            return _mc.AddOnMouseClicked();
+        }
+
+        public void Reset()
+        {
+            RegDevices.Clear();
+            return;
+        }
         public static void doRegisterMouseClick(string deviceID)
         {
             
@@ -146,7 +154,7 @@ namespace EGClassroom.ViewModels
         {
            
            if (string.IsNullOrEmpty(MouseCapture.deviceHandle)) return;
-           int existsDevice = (from dev in _regDevices where dev.DeviceID == MouseCapture.deviceHandle & dev.Role != RoleEnum.TEACHER select dev).Count();
+           int existsDevice = (from dev in _regDevices where dev.DeviceID == MouseCapture.deviceHandle select dev).Count();
            if (existsDevice == 0)
             {
                 doRegisterMouseClick(MouseCapture.deviceHandle);

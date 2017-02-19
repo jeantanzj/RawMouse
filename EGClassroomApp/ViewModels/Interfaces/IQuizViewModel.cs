@@ -8,5 +8,6 @@ namespace EGClassroom.ViewModels.Interfaces
 {
     public interface IQuizViewModel
     {
+        void Reset();
     }
 }

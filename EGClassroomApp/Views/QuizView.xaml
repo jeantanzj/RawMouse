@@ -4,8 +4,9 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:EGClassroom.Views"
-            mc:Ignorable="d"
-            xmlns:viewmodel="clr-namespace:EGClassroom.ViewModels"
+                mc:Ignorable="d"
+                xmlns:viewmodel="clr-namespace:EGClassroom.ViewModels"
+                xmlns:helper="clr-namespace:EGClassroom.Helper"
             Height="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=Height}"
             Width="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=Width}"
              xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid">
@@ -27,7 +28,7 @@
                 DockPanel.Dock="Top"
                 Height="600">
                 <!--DataContext="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.quizVM}"> -->
-                <WebBrowser Name="wb_ppt" viewmodel:QuizViewModel.BindableSource="{Binding PPTWebAddress}" />
+                    <WebBrowser Name="wb_ppt" DataContext="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.regDevicesVM}" helper:WebBrowserUtility.BindableSource="{Binding PPTWebAddress}" />
             </GroupBox>
             <WrapPanel Height="150" DataContext="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.answersVM}" >
                 <WrapPanel.Resources>
