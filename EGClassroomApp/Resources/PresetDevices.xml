@@ -3,6 +3,8 @@
   <!--<device>
     <DeviceID>65589</DeviceID>
     <StudentName>Jean</StudentName>
+    <ImagePath></ImagePath>
+    <Role>Teacher</Role>
   </device>-->
   <!--<device>
     <DeviceID></DeviceID>

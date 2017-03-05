@@ -60,6 +60,7 @@ namespace EGClassroom.ViewModels
         private  void _answers_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
             UpdateNumAnswers();
+            UpdateChartDetails();
             if (e.NewItems != null)
                 foreach (Answer item in e.NewItems)
                     item.PropertyChanged += answer_PropertyChanged;
@@ -234,7 +235,7 @@ namespace EGClassroom.ViewModels
         private void checkAnswersAgainst(string correctAnswer)
         {
             _correctAnswers.Add(correctAnswer);
-            CurrentCorrectAnswer = String.Format("The answer was '{0}'.",correctAnswer);
+            CurrentCorrectAnswer = "The correct answer was: " + correctAnswer;
 
             _answers.Where(ans => ans.QuestionID == _questionId & ans.StudentAnswer == correctAnswer).ToList().ForEach(
                  f =>
@@ -250,7 +251,7 @@ namespace EGClassroom.ViewModels
             );
 
             computeRecords();
-
+            UpdateChartDetails();
         }
 
         private void computeRecords()
@@ -282,13 +283,42 @@ namespace EGClassroom.ViewModels
             {
                 int total = _correctAnswers.Count();
                 int numCorrect = total - CountDifferences(_records[i].ResultsString.Split(',').ToList(), _correctAnswers);
-                _records[i].Score = string.Format("{0} of {1} ({2:p2}%)", numCorrect, total, (float)numCorrect / total);
+                _records[i].Score = string.Format("{0} of {1} ({2:p2})", numCorrect, total, (float)numCorrect / total);
             }
         }
         private int CountDifferences(List<string> x, List<string> y)
         {
             return (x.Zip(y, (a, b) => a.Equals(b) ? 0 : 1).Sum());
         }
+
+        private void UpdateChartDetails()
+        {
+            OnPropertyChanged("ChartData");
+        }
+        public  IEnumerable<ChartDetail> GetChartDetails()
+        {
+            string c = null;
+            try
+            {
+                c = _correctAnswers.ElementAt(_questionId - 1);
+            }
+            catch(ArgumentOutOfRangeException ex)
+            {
+                //fail silently
+            }
+           return _answers.Where(x => x.QuestionID == _questionId).GroupBy(x => x.StudentAnswer).OrderBy(x=>x.Key).Select(g => 
+                new ChartDetail { Key = g.Key, Value=g.Count(), IsCorrect = g.Key == c});
+        }
+
+        public IEnumerable<ChartDetail> ChartData
+        {
+            get
+            {
+                return GetChartDetails();
+            }
+           
+        }
+
         #region commands
         public RelayCommand ExportAnswersCommand
         {

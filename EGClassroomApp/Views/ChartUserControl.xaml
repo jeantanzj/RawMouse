@@ -1,0 +1,73 @@
+﻿<UserControl x:Class="EGClassroom.Views.ChartUserControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:EGClassroom.Views"
+             xmlns:viewmodel="clr-namespace:EGClassroom.ViewModels"
+             mc:Ignorable="d" 
+             d:DesignHeight="200" d:DesignWidth="200">
+    
+    <!--<UserControl.Resources>
+        <ObjectDataProvider x:Key="chartDetails" 
+            ObjectType="{x:Type viewmodel:ChartViewModel}" MethodName="GetData" />
+    </UserControl.Resources>-->
+    
+    <StackPanel>
+        <Label Content="Number of students who answered A,B or C"/>
+        <Grid>
+            <ListBox ItemsSource="{Binding ChartData}" >
+                <ListBox.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <VirtualizingStackPanel IsItemsHost="True">
+                            <VirtualizingStackPanel.LayoutTransform>
+                                <TransformGroup>
+                                    <RotateTransform Angle="90" />
+                                    <ScaleTransform ScaleX="-1" ScaleY="1" />
+                                </TransformGroup>
+                            </VirtualizingStackPanel.LayoutTransform>
+                        </VirtualizingStackPanel>
+                    </ItemsPanelTemplate>
+
+                </ListBox.ItemsPanel>
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <Border Width="200" Height="50">
+                            <Grid>
+                                <Rectangle StrokeThickness="0" 
+                               Height="40" Width="{Binding Value}" Margin="3" 
+                               HorizontalAlignment="Right" VerticalAlignment="Bottom">
+                                    <Rectangle.LayoutTransform>
+                                        <ScaleTransform ScaleX="50" />
+                                    </Rectangle.LayoutTransform>
+                                    <Rectangle.Style>
+                                        <Style TargetType="{x:Type Rectangle}">
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding Path=IsCorrect,UpdateSourceTrigger=PropertyChanged}" Value="True">
+                                                    <Setter Property="Rectangle.Fill" Value="#339933"/>
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding Path=IsCorrect,UpdateSourceTrigger=PropertyChanged}" Value="False">
+                                                    <Setter Property="Rectangle.Fill" Value="#D13438"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Rectangle.Style>
+                                </Rectangle>
+                                <TextBlock Margin="20" FontWeight="Bold" 
+                                 HorizontalAlignment="Right" VerticalAlignment="Center" >
+                                    <Run Text="{Binding Key}"/>
+                                    <Run Text=": "/>
+                                    <Run Text="{Binding Value}"/>
+                                    <TextBlock.LayoutTransform>
+                                        <ScaleTransform ScaleX="-1" ScaleY="1" />
+                                    </TextBlock.LayoutTransform>
+                                </TextBlock>
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+        </Grid>
+    </StackPanel>
+   
+</UserControl>

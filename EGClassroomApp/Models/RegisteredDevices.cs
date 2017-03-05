@@ -25,7 +25,10 @@ namespace EGClassroom.Models
                 {
                     string deviceId = device.Element("DeviceID").Value;
                     string studentName = device.Element("StudentName").Value;
-                    presets.Add(new RegisteredDevice() { DeviceID = deviceId, Name = studentName });
+                    string imagePath = device.Element("ImagePath").Value;
+                    Helper.RoleEnum role = Helper.RoleEnum.STUDENT;
+                    if (device.Element("Role").Value.ToUpper() == "TEACHER") role = Helper.RoleEnum.TEACHER;                   
+                    presets.Add(new RegisteredDevice() { DeviceID = deviceId, Name = studentName, ImagePath = imagePath, Role = role});
 
                 }
             }

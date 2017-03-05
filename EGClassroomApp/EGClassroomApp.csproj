@@ -83,6 +83,7 @@
     <Compile Include="Helper\WebBrowserUtility.cs" />
     <Compile Include="Helper\InverseBoolConverter.cs" />
     <Compile Include="Models\BaseModel.cs" />
+    <Compile Include="Models\ChartDetail.cs" />
     <Compile Include="Models\Interfaces\IAnswer.cs" />
     <Compile Include="Models\Interfaces\IRegisteredDevice.cs" />
     <Compile Include="Models\Record.cs" />
@@ -107,6 +108,9 @@
     <Compile Include="Views\AnswerWindowView.xaml.cs">
       <DependentUpon>AnswerWindowView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\ChartUserControl.xaml.cs">
+      <DependentUpon>ChartUserControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\QuizView.xaml.cs">
       <DependentUpon>QuizView.xaml</DependentUpon>
     </Compile>
@@ -114,6 +118,9 @@
       <DependentUpon>RegisteredDeviceView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Helper\WriteToFile.cs" />
+    <Compile Include="Views\StudentRecordUserControl.xaml.cs">
+      <DependentUpon>StudentRecordUserControl.xaml</DependentUpon>
+    </Compile>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -134,11 +141,19 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\ChartUserControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\QuizView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\RegisteredDeviceView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\StudentRecordUserControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

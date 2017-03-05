@@ -30,43 +30,53 @@
                 <!--DataContext="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.quizVM}"> -->
                     <WebBrowser Name="wb_ppt" DataContext="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.regDevicesVM}" helper:WebBrowserUtility.BindableSource="{Binding PPTWebAddress}" />
             </GroupBox>
-            <WrapPanel Height="150" DataContext="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.answersVM}" >
-                <WrapPanel.Resources>
-                    <Style TargetType="Label">
-                        <Setter Property="FontSize" Value="20"/>
-                    </Style>
-                    <Style TargetType="TextBlock">
-                        <Setter Property="FontSize" Value="20"/>
-                    </Style>
-                </WrapPanel.Resources>
-                <Label Content="Quiz Mode:"/>
-                    <Label>
-                        <Label.Style>
-                            <Style TargetType="{x:Type Label}">
+
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="5*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <WrapPanel Grid.Column ="0"  DataContext="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.answersVM}" >
+                        <WrapPanel.Resources>
+                            <Style TargetType="Label">
                                 <Setter Property="FontSize" Value="20"/>
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding Path=InQuizMode,UpdateSourceTrigger=PropertyChanged}" Value="True">
-                                        <Setter Property="Label.Content" Value="STARTED" />
-                                        <Setter Property="Label.Foreground" Value="#339933"/>
-                                    </DataTrigger>
-                                    <DataTrigger Binding="{Binding Path=InQuizMode,UpdateSourceTrigger=PropertyChanged}" Value="False">
-                                        <Setter Property="Label.Content" Value="STOPPED" />
-                                        <Setter Property="Label.Foreground" Value="#D13438"/>
-                                    </DataTrigger>
-                                </Style.Triggers>
                             </Style>
-                        </Label.Style>
-                    </Label>
-                    <Label Content="Current Question:"/>
-                    <Label Content="{Binding Path=QuestionID}"/>
-                    <Label Content="Answers Received: "/>
-                    <Label Content="{Binding Path=NumAnswers}"/>
-                    <!--<Label Content="{Binding Path=regDevicesVM.RegDevices.Count}"/>-->
-                    <Label Content="{Binding Path=CurrentCorrectAnswer}" Foreground="#339933"/>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="FontSize" Value="20"/>
+                            </Style>
+                        </WrapPanel.Resources>
+                        <Label Content="Quiz Mode:"/>
+                        <Label>
+                            <Label.Style>
+                                <Style TargetType="{x:Type Label}">
+                                    <Setter Property="FontSize" Value="20"/>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Path=InQuizMode,UpdateSourceTrigger=PropertyChanged}" Value="True">
+                                            <Setter Property="Label.Content" Value="STARTED" />
+                                            <Setter Property="Label.Foreground" Value="#339933"/>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding Path=InQuizMode,UpdateSourceTrigger=PropertyChanged}" Value="False">
+                                            <Setter Property="Label.Content" Value="STOPPED" />
+                                            <Setter Property="Label.Foreground" Value="#D13438"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Label.Style>
+                        </Label>
+                        <Label Content="Current Question:"/>
+                        <Label Content="{Binding Path=QuestionID}"/>
+                        <Label Content="Answers Received: "/>
+                        <Label Content="{Binding Path=NumAnswers}"/>
+                        <!--<Label Content="{Binding Path=regDevicesVM.RegDevices.Count}"/>-->
+                        <Label Content="{Binding Path=CurrentCorrectAnswer}" Foreground="#339933"/>
 
 
-            </WrapPanel>
-            
+                    </WrapPanel>
+
+                   
+                </Grid>
+           
             </StackPanel>
 
 
