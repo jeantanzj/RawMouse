@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EGClassroom.ViewModels
+namespace EGClassroom.Helper
 {
     public enum AnswerStatusEnum 
     {

@@ -5,11 +5,17 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:EGClassroom.Views"
         mc:Ignorable="d"
+        xmlns:helper="clr-namespace:EGClassroom.Helper"
         xmlns:viewmodel="clr-namespace:EGClassroom.ViewModels"
         Height="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=Height}"
         Width="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=Width}"
          xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid">
-
+    <UserControl.Resources>
+        <helper:ValueConverterGroup x:Key="InvertAndVisibilitate">
+            <helper:InverseBoolConverter/>
+            <helper:BoolToVisibilityConverter/>
+        </helper:ValueConverterGroup>
+    </UserControl.Resources>
     <DockPanel >
         <!--DataContext="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.regDevicesVM}"-->
         <DockPanel.DataContext>
@@ -24,11 +30,11 @@
 
             <Grid Margin="20">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="95"/>
+                    <RowDefinition Height="110"/>
                     <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="1.5*" />
+                    <ColumnDefinition Width="1*" />
                     <ColumnDefinition Width="1*" />
                 </Grid.ColumnDefinitions>
             <StackPanel Grid.Row="0" Grid.Column="0" >
@@ -51,13 +57,18 @@
                     <DataGrid Grid.Row="0" Margin="10"
                     AutoGenerateColumns="True"
                     HorizontalAlignment="Stretch" Name="datagrid_devices"
-                    ItemsSource="{Binding RegDevices}"
+                    ItemsSource="{Binding RegDevices}" AllowDrop="True"
                     />
-
-                    <Button Grid.Row="1"
-                            Margin="2"  Height="Auto" Content="Show the quiz!" 
+                <StackPanel  Grid.Row="1">
+                    <Button
+                            Margin="2"  Height="50" Content="Show the quiz!" 
                             Command="{Binding RelativeSource={RelativeSource AncestorType=Window}, 
-                            Path=DataContext.ToQuizViewAndToAnswerWindowViewCommand}"/>
+                            Path=DataContext.ToQuizViewAndToAnswerWindowViewCommand}" IsEnabled="{Binding IsTeacherSpecified}"/>
+                    <Label Content="At least 1 mouse must be identified with the role: TEACHER" 
+                           Foreground="#D13438"
+                           Visibility="{Binding Path=IsTeacherSpecified, Converter={StaticResource InvertAndVisibilitate}}"/>
+
+                </StackPanel>
                 </Grid>
                 
 

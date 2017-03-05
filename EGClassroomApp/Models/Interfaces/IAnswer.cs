@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EGClassroom.Helper;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,7 +12,7 @@ namespace EGClassroom.Models.Interfaces
         string DeviceID { get;  }
         string StudentName { get;  }
         string StudentAnswer { get;  }
-        ViewModels.AnswerStatusEnum Status { get;}
+        AnswerStatusEnum Status { get;}
        
     }
 }

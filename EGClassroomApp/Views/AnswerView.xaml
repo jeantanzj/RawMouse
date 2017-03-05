@@ -4,14 +4,14 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:EGClassroom.Views"
-        xmlns:g="clr-namespace:EGClassroom"
+        xmlns:helper="clr-namespace:EGClassroom.Helper"
         mc:Ignorable="d"
         xmlns:viewmodel="clr-namespace:EGClassroom.ViewModels"
         Height="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=Height}"
         Width="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=Width}"
         xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid">
     <UserControl.Resources>
-        <g:InverseBoolConverter x:Key="InvertBool"/>
+        <helper:InverseBoolConverter x:Key="InvertBool"/>
     </UserControl.Resources>
     <!--The MainWindow's DataContext is the CompositeViewModel-->
     <ScrollViewer>

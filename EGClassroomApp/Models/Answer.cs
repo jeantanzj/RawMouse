@@ -7,6 +7,7 @@ using System.ComponentModel;
 using EGClassroom.ViewModels;
 using System.Runtime.CompilerServices;
 using System.Collections.ObjectModel;
+using EGClassroom.Helper;
 
 namespace EGClassroom.Models
 {
@@ -16,7 +17,7 @@ namespace EGClassroom.Models
         private string _deviceID;
         private string _studentName;
         private string _studentAnswer;
-        private ViewModels.AnswerStatusEnum _status;
+        private AnswerStatusEnum _status;
 
         public int QuestionID
         {

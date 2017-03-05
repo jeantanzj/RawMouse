@@ -11,6 +11,7 @@ using System.Reflection;
 using System.Collections.Specialized;
 using System.Windows.Forms;
 using System.IO;
+using EGClassroom.Helper;
 
 namespace EGClassroom.ViewModels
 {

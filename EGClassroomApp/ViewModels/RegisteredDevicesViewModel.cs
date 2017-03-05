@@ -12,6 +12,9 @@ using System.Windows;
 using log4net;
 using System.Reflection;
 using System.IO;
+using System.Collections.Specialized;
+using System.ComponentModel;
+using EGClassroom.Helper;
 
 namespace EGClassroom.ViewModels
 {
@@ -20,6 +23,7 @@ namespace EGClassroom.ViewModels
         private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
         private static ObservableCollection<RegisteredDevice> _regDevices;
+        private bool _isTeacherSpecified;
         private ICommand _loadDevicesCommand;
         private RelayCommand _registerCommand;
         private RelayCommand _chooseLocalFileCommand;
@@ -33,6 +37,7 @@ namespace EGClassroom.ViewModels
         public RegisteredDevicesViewModel( ){
             _loadDevicesCommand = new LoadDevicesCommand();
             _regDevices = GetRegisteredDevices();
+            _regDevices.CollectionChanged += _regDevices_CollectionChanged;
             //_mc = MouseCapture.Instance;
             _mc = new MouseCapture();
             StartMouse();
@@ -43,6 +48,25 @@ namespace EGClassroom.ViewModels
         {
             get { return _regDevices; }
         }
+
+        private void _regDevices_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            UpdateIsTeacherSpecified();
+            if (e.NewItems != null)
+                foreach (RegisteredDevice item in e.NewItems)
+                    item.PropertyChanged += regDevice_PropertyChanged;
+
+            if (e.OldItems != null)
+                foreach (RegisteredDevice item in e.OldItems)
+                    item.PropertyChanged -= regDevice_PropertyChanged;
+        }
+
+        private void regDevice_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            OnPropertyChanged("RegDevices");
+            UpdateIsTeacherSpecified();
+        }
+
         public ObservableCollection<RegisteredDevice> GetRegisteredDevices()
         {
             if (_regDevices == null) _regDevices = new ObservableCollection<RegisteredDevice>();
@@ -109,6 +133,26 @@ namespace EGClassroom.ViewModels
             {
                 return _chooseLocalFileCommand ?? (_chooseLocalFileCommand = new RelayCommand(
               param => showChooseLocalFileDialog()));
+            }
+        }
+
+        private void UpdateIsTeacherSpecified()
+        {
+            IsTeacherSpecified = _regDevices.Count(x => x.Role == RoleEnum.TEACHER) > 0;
+        }
+        public bool IsTeacherSpecified
+        {
+            get
+            {
+                return _isTeacherSpecified;
+            }
+            set
+            {
+                if(_isTeacherSpecified != value)
+                {
+                    _isTeacherSpecified = value;
+                    OnPropertyChanged();
+                }
             }
         }
 
