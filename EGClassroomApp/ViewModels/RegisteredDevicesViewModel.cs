@@ -29,11 +29,18 @@ namespace EGClassroom.ViewModels
 
         //private RelayCommand _choosePPTCommand;
         //private static string _pptFilePath = "...";
-        private static string _pptWebAddress = "https://docs.google.com/presentation/d/1xjzWvL0Rk7pqMZBrdfdgMPwBbij3HO6Xod-A0GwpsAg/present#slide=id.p";
+        private static string _pptWebAddress;
         private static string _messages = "No messages";
         private MouseCapture _mc;
         private static string[] _defaultAvatars = new string[] { "boy-0", "boy-1", "boy-2", "boy-3", "boy-4", "girl-0", "girl-1", "girl-2", "girl-3", "girl-4" };
         public RegisteredDevicesViewModel( ){
+            if(_pptWebAddress == null)
+            {
+               var filePath= Path.Combine(
+                            Directory.GetParent(Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location)
+                                                ).Parent.FullName, (@"Resources\readme.pdf"));
+                _pptWebAddress = String.Format("file:///{0}", filePath);
+            }
             _loadDevicesCommand = new LoadDevicesCommand();
             _regDevices = GetRegisteredDevices();
             _regDevices.CollectionChanged += _regDevices_CollectionChanged;

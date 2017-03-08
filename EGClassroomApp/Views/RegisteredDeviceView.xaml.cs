@@ -25,16 +25,19 @@ namespace EGClassroom.Views
             InitializeComponent();
             
             this.Dispatcher.ShutdownStarted += Dispatcher_ShutdownStarted;
+            this.datagrid_devices.AutoGeneratingColumn += Datagrid_devices_AutoGeneratingColumn;
         }
-        private void Grid_AutoGeneratingColumn(object sender, DataGridAutoGeneratingColumnEventArgs e)
+
+        private void Datagrid_devices_AutoGeneratingColumn(object sender, DataGridAutoGeneratingColumnEventArgs e)
         {
-            if (e.Column.Header.ToString() == "DEVICEID")
+            if (e.Column.Header.ToString() == "DeviceID")
             {
                 // e.Cancel = true;   // For not to include 
                 e.Column.IsReadOnly = true; // Makes the column as read only
             }
-
         }
+
+        
         private void Dispatcher_ShutdownStarted(object sender, EventArgs e)
         {
             try
