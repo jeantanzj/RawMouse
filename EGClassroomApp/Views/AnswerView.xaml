@@ -12,58 +12,72 @@
         xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid">
     <UserControl.Resources>
         <helper:InverseBoolConverter x:Key="InvertBool"/>
+        <helper:PassThroughConverter x:Key="PassThrough"/>
+        
+
     </UserControl.Resources>
     <!--The MainWindow's DataContext is the CompositeViewModel-->
     <ScrollViewer>
     <DockPanel DataContext="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.answersVM}">
-      
-        <Menu DockPanel.Dock="Top">
-            <MenuItem Header="Register Devices" Command="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.ToRegisteredDeviceViewCommand}"/>
+
+            <Menu DockPanel.Dock="Top">             
+                
+                <MenuItem Header="Register Devices" Command="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.ToRegisteredDeviceViewCommand}"/>
             <MenuItem Header="Quiz View" Command="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.ToQuizViewCommand}"/>
             <MenuItem Header="Export to CSV" Command="{Binding ExportAnswersCommand}"/>
         </Menu>
         
-        <StackPanel Margin="10">
-               
-
-                    
-           
+            <StackPanel Margin="10">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="2*"/>
                     <ColumnDefinition Width="1*"/>
                 </Grid.ColumnDefinitions>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="250"/>
-                        <RowDefinition Height="Auto"/>
-                    </Grid.RowDefinitions>
-                    <StackPanel Grid.Column="0" Grid.Row="0">
-
-                        <Button Margin="20,10" Padding="20,30" Background="#1BA1E2" Content="Start getting responses" Command="{Binding ReceiveInputCommand}"
+                <Button Grid.Column="0" Grid.Row="0" Margin="20,10" Padding="20,30" Background="#1BA1E2" Content="Start getting responses" Command="{Binding ReceiveInputCommand}"
                         IsEnabled="{Binding Path=InQuizMode,Mode=Default,UpdateSourceTrigger=PropertyChanged, Converter={StaticResource InvertBool}}"/>
-                        <Label HorizontalAlignment="Center" Content="Choose the correct answer to stop recording responses"/>
-                        <WrapPanel HorizontalAlignment="Center">
-                            <Button Margin="10,10" Padding="20,10" Content="A" Command="{Binding StopInput_A_Command}"
-                             IsEnabled="{Binding Path=InQuizMode, Mode=Default,UpdateSourceTrigger=PropertyChanged}"/>
-                            <Button Margin="10,10" Padding="20,10" Content="B" Command="{Binding StopInput_B_Command}"
-                             IsEnabled="{Binding Path=InQuizMode, Mode=Default,UpdateSourceTrigger=PropertyChanged}"/>
-                            <Button Margin="10,10" Padding="20,0" Content="C" Command="{Binding StopInput_C_Command}"
-                             IsEnabled="{Binding Path=InQuizMode, Mode=Default,UpdateSourceTrigger=PropertyChanged}"/>
-                        </WrapPanel>
-                    </StackPanel>
+
+                <StackPanel Grid.Column="1" Grid.Row="0" VerticalAlignment="Stretch">
+
+                    <WrapPanel Margin="0,10">
+                        <CheckBox Name="Cbx_Chart" IsChecked="{Binding IsChartShown}" Content="Chart" Margin="0,0,10,0"/>
+                        <CheckBox Name="Cbx_StudentRecord" IsChecked="{Binding IsStudentRecordShown}" Content="Student Records"/>
+                    </WrapPanel>
+                    <Button Padding="0,15" Command="{Binding RelativeSource={RelativeSource AncestorType=Window}, 
+                            Path=DataContext.ToStudentRecordWindowViewCommand}" Content="Undock"/>
+                </StackPanel>
                 
-                    <local:ChartUserControl Grid.Column="1" Grid.Row="0"/>
+            </Grid>
+
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="1*"/>
+                </Grid.ColumnDefinitions>
+                <StackPanel Grid.Column="0">
+                    <Label HorizontalAlignment="Center" Content="Choose the correct answer to stop recording responses"/>
+                    <WrapPanel HorizontalAlignment="Center" Margin="0,5">
+                        <Button Margin="10,10" Padding="20,10" Content="A" Command="{Binding StopInput_A_Command}"
+                             IsEnabled="{Binding Path=InQuizMode, Mode=Default,UpdateSourceTrigger=PropertyChanged}"/>
+                        <Button Margin="10,10" Padding="20,10" Content="B" Command="{Binding StopInput_B_Command}"
+                             IsEnabled="{Binding Path=InQuizMode, Mode=Default,UpdateSourceTrigger=PropertyChanged}"/>
+                        <Button Margin="10,10" Padding="20,0" Content="C" Command="{Binding StopInput_C_Command}"
+                             IsEnabled="{Binding Path=InQuizMode, Mode=Default,UpdateSourceTrigger=PropertyChanged}"/>
+                    </WrapPanel>
                     <DataGrid 
-                    Grid.Column="0"
-                    Grid.Row="1"
                     AutoGenerateColumns="True"
                     HorizontalAlignment="Stretch" Name="datagrid_answer" VerticalAlignment="Top"
-                    ItemsSource="{Binding Answers}" IsReadOnly="True"/>
+                    ItemsSource="{Binding Answers}" IsReadOnly="True" Margin="5"/>
 
-                    <local:StudentRecordUserControl Grid.Column="1" Grid.Row="1"/>
-                </Grid>
-            
-        </StackPanel>
+                </StackPanel>
+                <StackPanel  Grid.Column="1">
+                    <local:ChartUserControl />
+                    <local:StudentRecordUserControl />
+                </StackPanel>
+               
+            </Grid>
+            </StackPanel>
+      
+
     </DockPanel>
     </ScrollViewer>
 </UserControl>

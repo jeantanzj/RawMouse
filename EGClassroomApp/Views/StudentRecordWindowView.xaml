@@ -1,0 +1,28 @@
+﻿<Controls:MetroWindow x:Class="EGClassroom.Views.StudentRecordWindowView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:EGClassroom.Views"
+        mc:Ignorable="d"
+        xmlns:viewmodel="clr-namespace:EGClassroom.ViewModels"
+        xmlns:helper="clr-namespace:EGClassroom.Helper"
+        Title="StudentRecordWindowView"
+        Height="500" 
+        Width="500" 
+        WindowState="Normal" 
+        xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid">
+    <Window.Resources>
+        <helper:BoolToVisibilityConverter x:Key="BoolVis"/>
+        <DataTemplate DataType="{x:Type viewmodel:AnswersViewModel}">
+            <ScrollViewer>
+                <StackPanel>
+                    <local:ChartUserControl Visibility="{Binding IsChartShown, Converter={StaticResource BoolVis}}"/>
+                    <local:StudentRecordUserControl Visibility="{Binding IsStudentRecordShown, Converter={StaticResource BoolVis}}"/>
+                </StackPanel>
+            </ScrollViewer>
+        </DataTemplate>
+    </Window.Resources>
+    <ContentControl x:Name="Pages"  Content="{Binding StudentRecordWindowViewModel}" />
+ </Controls:MetroWindow>

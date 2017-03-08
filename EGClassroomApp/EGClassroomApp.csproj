@@ -79,6 +79,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Helper\BoolToVisibilityConverter.cs" />
+    <Compile Include="Helper\PassThroughConverter.cs" />
     <Compile Include="Helper\ValueConverterGroup.cs" />
     <Compile Include="Helper\WebBrowserUtility.cs" />
     <Compile Include="Helper\InverseBoolConverter.cs" />
@@ -121,6 +122,9 @@
     <Compile Include="Views\StudentRecordUserControl.xaml.cs">
       <DependentUpon>StudentRecordUserControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\StudentRecordWindowView.xaml.cs">
+      <DependentUpon>StudentRecordWindowView.xaml</DependentUpon>
+    </Compile>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -154,6 +158,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\StudentRecordUserControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\StudentRecordWindowView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

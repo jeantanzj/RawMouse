@@ -33,10 +33,10 @@ namespace EGClassroom.ViewModels
         private static bool _inQuizMode = false;
         private static string _currentCorrectAnswer = null;
 
-
         private MouseCapture _mc;
 
-       
+        private bool _isChartShown = true;
+        private bool _isStudentRecordShown = true;
         public AnswersViewModel()
         {
             //_loadCommand = new LoadAnswersCommand();
@@ -159,7 +159,36 @@ namespace EGClassroom.ViewModels
             }
         }
 
-#endregion Members
+        public bool IsChartShown
+        {
+            get
+            {
+                return _isChartShown;
+            }
+
+            set
+            {
+                _isChartShown = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public bool IsStudentRecordShown
+        {
+            get
+            {
+                return _isStudentRecordShown;
+            }
+
+            set
+            {
+                _isStudentRecordShown = value;
+                OnPropertyChanged();
+            }
+        }
+
+
+        #endregion Members
 
 
         internal void StopMouse()
@@ -388,7 +417,8 @@ namespace EGClassroom.ViewModels
             }
         }
 
-      
+        
+
         #endregion commands
 
 

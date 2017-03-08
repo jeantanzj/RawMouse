@@ -12,11 +12,12 @@
         <ObjectDataProvider x:Key="chartDetails" 
             ObjectType="{x:Type viewmodel:ChartViewModel}" MethodName="GetData" />
     </UserControl.Resources>-->
-    
-    <StackPanel>
+
+    <StackPanel HorizontalAlignment="Center">
         <Label Content="Number of students who answered A,B or C"/>
         <Grid>
             <ListBox ItemsSource="{Binding ChartData}" >
+               
                 <ListBox.ItemsPanel>
                     <ItemsPanelTemplate>
                         <VirtualizingStackPanel IsItemsHost="True">

@@ -15,6 +15,7 @@
             <helper:InverseBoolConverter/>
             <helper:BoolToVisibilityConverter/>
         </helper:ValueConverterGroup>
+    
     </UserControl.Resources>
     <DockPanel >
         <!--DataContext="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.regDevicesVM}"-->

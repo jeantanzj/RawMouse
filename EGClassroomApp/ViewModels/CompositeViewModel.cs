@@ -19,10 +19,11 @@ namespace EGClassroom.ViewModels
         private RelayCommand _toAnswerWindowViewCommand;
         private RelayCommand _toQuizViewAndToAnswerWindowViewCommand;
         private RelayCommand _toQuizViewCommand;
+        private RelayCommand _toStudentRecordWindowViewCommand;
         private RelayCommand _resetAllCommand;
         private static object _selectedViewModel;
         private static object _answerWindowViewModel;
-        
+        private static object _studentRecordWindowViewModel;
         
         private CompositeViewModel()
         {
@@ -72,8 +73,22 @@ namespace EGClassroom.ViewModels
         {
             get { return _answerWindowViewModel; }
 
-            set { _answerWindowViewModel = value; OnPropertyChanged(); }
+            private set { _answerWindowViewModel = value; OnPropertyChanged(); }
         }
+        public  object StudentRecordWindowViewModel
+        {
+            get
+            {
+                return _studentRecordWindowViewModel;
+            }
+
+            private set
+            {
+                _studentRecordWindowViewModel = value;
+                OnPropertyChanged();
+            }
+        }
+
         public RelayCommand ToRegisteredDeviceViewCommand
         {
             get
@@ -121,6 +136,25 @@ namespace EGClassroom.ViewModels
                 ));
             }
         }
+
+        public RelayCommand ToStudentRecordWindowViewCommand
+        {
+              get
+            {
+                return _toStudentRecordWindowViewCommand ?? (_toStudentRecordWindowViewCommand = new RelayCommand(param =>
+                goToStudentRecordWindowView()));
+            }
+                
+        }
+
+        private void goToStudentRecordWindowView()
+        {
+            
+            StudentRecordWindowViewModel = answersVM;
+            OpenStudentRecordWindowIfClosed();
+
+        }
+
 
         private void goToAnswerWindowView()
         {
@@ -178,6 +212,18 @@ namespace EGClassroom.ViewModels
                 return;
             }
             AnswerWindowView awin = new AnswerWindowView();
+            awin.DataContext = this;
+            awin.Show();
+        }
+
+        private void OpenStudentRecordWindowIfClosed()
+        {
+            if (IsWindowOpen<StudentRecordWindowView>())
+            {
+                Application.Current.Windows.OfType<StudentRecordWindowView>().First().Activate();
+                return;
+            }
+            StudentRecordWindowView awin = new StudentRecordWindowView();
             awin.DataContext = this;
             awin.Show();
         }

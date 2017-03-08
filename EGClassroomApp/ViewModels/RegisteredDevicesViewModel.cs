@@ -23,7 +23,6 @@ namespace EGClassroom.ViewModels
         private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
         private static ObservableCollection<RegisteredDevice> _regDevices;
-        private bool _isTeacherSpecified;
         private ICommand _loadDevicesCommand;
         private RelayCommand _registerCommand;
         private RelayCommand _chooseLocalFileCommand;
@@ -138,22 +137,15 @@ namespace EGClassroom.ViewModels
 
         private void UpdateIsTeacherSpecified()
         {
-            IsTeacherSpecified = _regDevices.Count(x => x.Role == RoleEnum.TEACHER) > 0;
+            OnPropertyChanged("IsTeacherSpecified");
         }
         public bool IsTeacherSpecified
         {
             get
             {
-                return _isTeacherSpecified;
+                return _regDevices.Count(x => x.Role == RoleEnum.TEACHER) > 0;
             }
-            set
-            {
-                if(_isTeacherSpecified != value)
-                {
-                    _isTeacherSpecified = value;
-                    OnPropertyChanged();
-                }
-            }
+           
         }
 
         private void showChooseLocalFileDialog()

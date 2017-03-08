@@ -5,37 +5,40 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:EGClassroom.Views"
              mc:Ignorable="d" 
-             Height="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=Height}"
-             Width="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=Width}">
-    <ScrollViewer>
+            HorizontalAlignment="Stretch"
+	        VerticalAlignment="Stretch"
+            Height="auto"
+            Width="auto">
     <ItemsControl ItemsSource="{Binding Records}" >
 
         <ItemsControl.ItemsPanel>
             <ItemsPanelTemplate>
-                <StackPanel Margin="10"/>
+                <!--<StackPanel Margin="10"/>-->
+                <UniformGrid Columns="2" Margin="10"/>
             </ItemsPanelTemplate>
         </ItemsControl.ItemsPanel>
         <ItemsControl.ItemTemplate>
             <DataTemplate>
-                <WrapPanel Orientation="Horizontal">
-                    <Grid Margin="0,5,0,0">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="auto"/>
-                            <ColumnDefinition/>
-                        </Grid.ColumnDefinitions>
-                        <Image Source="{Binding Image}" Height="64" Width="64" Grid.Column="0"/>
-                        <StackPanel Grid.Column="1" Orientation="Vertical" Width="150" Height="100" >
-                            <TextBlock Text="{Binding Name}" Margin="5,1,0,1"/>
-                            <TextBlock Text="{Binding ResultsString}" Margin="5,1,0,1"/>
-                            <WrapPanel Orientation="Horizontal">
-                                <TextBlock Text="Score: " Margin="5,1,0,1"/>
-                                <TextBlock Text="{Binding Score}" Margin="3,1,0,1"/>
-                            </WrapPanel>
-                        </StackPanel>
-                    </Grid>
-                </WrapPanel>
+                <Border BorderThickness="1" BorderBrush="Gray">
+                    <WrapPanel Orientation="Horizontal">
+                        <Grid Margin="0,5,0,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="64"/>
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+                            <Image Source="{Binding Image}" Height="64" Width="64" Grid.Column="0"/>
+                            <StackPanel Grid.Column="1" Orientation="Vertical"  >
+                                <TextBlock Text="{Binding Name}" Margin="5,1,0,1"/>
+                                <TextBlock TextWrapping="WrapWithOverflow" Text="{Binding ResultsString}" Margin="5,1,0,1"/>
+                                <WrapPanel Orientation="Horizontal">
+                                    <TextBlock Text="Score: " Margin="5,1,0,1"/>
+                                    <TextBlock TextWrapping="WrapWithOverflow" Text="{Binding Score}" Margin="3,1,0,1"/>
+                                </WrapPanel>
+                            </StackPanel>
+                        </Grid>
+                    </WrapPanel>
+                </Border>
             </DataTemplate>
         </ItemsControl.ItemTemplate>
     </ItemsControl>
-    </ScrollViewer>
 </UserControl>

@@ -21,7 +21,7 @@ namespace EGClassroom.Helper
             {
                 sb.AppendLine(String.Format("{0},{1},{2},{3}",ans.QuestionID, ans.DeviceID, ans.StudentName, ans.StudentAnswer));
             }
-            using(System.IO.StreamWriter writer = new System.IO.StreamWriter(filePath, true))
+            using(System.IO.StreamWriter writer = new System.IO.StreamWriter(filePath, false))
             {
                 writer.WriteLine(sb.ToString());
             }
